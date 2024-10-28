@@ -16,27 +16,30 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("users")
+    @GetMapping
     public ResponseEntity<List<UserResponseDto>> getUsers(){
         return ResponseEntity.ok(userService.getAll());
     }
 
-    @GetMapping("users/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<UserResponseDto> getUser(@PathVariable Long id){
         return ResponseEntity.ok(userService.get(id));
     }
 
-    @PostMapping("users")
+    @PostMapping
     public ResponseEntity<UserResponseDto> createUser(@RequestBody UserRequestDto userRequestDto){
         var userResponse = userService.create(userRequestDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(userResponse);
     }
+
+
+
 }

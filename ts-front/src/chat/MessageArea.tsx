@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Client, over } from "stompjs";
-import * as SockJS from 'sockjs-client';
+import SockJS from 'sockjs-client';
 
 let stompClient: Client;
 
@@ -14,7 +14,7 @@ type Payload  = {
 
 const MessageArea = () => {
   const [privateMessage, setPrivateMessage] = useState(new Map());
-  const [publicMessage, setPublicMessage] = useState([]);
+  const [publicMessage, setPublicMessage] = useState<Payload[]>([]);
   const [chatArea, setChatArea] = useState("PUBLIC");
   const [userData, setUserData] = useState({
     username: "",
@@ -46,7 +46,7 @@ const MessageArea = () => {
     userJoin();
   };
 
-  const onError = (error) => {
+  const onError = (error: any) => {
     console.log(error);
   };
 
@@ -152,16 +152,17 @@ const MessageArea = () => {
   };
 
   // handle message input
-  const handleMessageInput = (event) => {
+  const handleMessageInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     setUserData({ ...userData, message: value });
   };
 
   // handle username input
-  const handleUsernameInput = (event) => {
+  const handleUsernameInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     setUserData({ ...userData, username: value });
   };
+
   return (
     <div className="container">
       {userData.connected ? (
@@ -202,7 +203,7 @@ const MessageArea = () => {
                       <li
                         className={`message ${chat.senderName === userData.username && "self"
                           }`}
-                        key={index}
+                        key={index + chat.receiverName}
                       >
                         {chat.senderName !== userData.username && (
                           <div className="avatar">{chat.senderName}</div>)}
@@ -287,7 +288,6 @@ const MessageArea = () => {
             name="userName"
             value={userData.username}
             onChange={handleUsernameInput}
-            margin="normal"
           />
           <button type="button" onClick={registerUser}>
             connect
