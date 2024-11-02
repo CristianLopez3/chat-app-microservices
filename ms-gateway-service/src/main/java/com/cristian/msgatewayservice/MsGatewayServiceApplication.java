@@ -5,9 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.time.LocalDateTime;
 
@@ -31,7 +28,7 @@ public class MsGatewayServiceApplication {
 								 *  would redirect to
 								 *  http://localhost:8080/api/v1/users
 								 */
-								.rewritePath("/chat/(?<segment>.*)", "/api/v1/${segment}")
+								.rewritePath("/chat/(?<segment>.*)", "/api/${segment}")
 								.addResponseHeader("X-response-time", LocalDateTime.now().toString())
 						)
 						.uri("lb://ms-users-service")

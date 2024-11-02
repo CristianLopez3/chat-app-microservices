@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Container, TextField, Button, Box, Typography } from '@mui/material';
 
 type UserResponse = {
