@@ -10,13 +10,12 @@ spring:
       globalcors:
         corsConfigurations:
           '[/**]':
-            allowedOrigins: "*"
-            allowedHeaders: "*"
+            allowedOrigins: "http://localhost:5173"
             allowedMethods:
               - GET
               - POST
-              - DELETE
               - PUT
+              - DELETE
               - OPTIONS
 
 management:

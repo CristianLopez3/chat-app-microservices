@@ -10,7 +10,6 @@ import com.cristian.msusersservice.repository.UserRepository;
 import com.cristian.msusersservice.service.AuthService;
 import com.cristian.msusersservice.service.UserService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Log4j
 public class UserServiceImpl implements UserService, AuthService {
 
     private final UserRepository userRepository;

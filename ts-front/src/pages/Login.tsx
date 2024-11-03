@@ -18,8 +18,7 @@ const Login = () => {
       const response = await fetch('http://localhost:8089/chat/users/auth/login', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': 'no-cors',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           username: email,
