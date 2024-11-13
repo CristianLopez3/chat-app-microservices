@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService, AuthService {
 
     @Override
     public UserResponseDto login(LoginRequestDto loginRequestDto) {
-        var user =userRepository.findByUsername(loginRequestDto.username())
+        var user = userRepository.findByUsername(loginRequestDto.username())
                 .orElseThrow(
                         () -> new UserNotFoundException(String.format("User with username: %s, does not exists",
                                 loginRequestDto.username())));
