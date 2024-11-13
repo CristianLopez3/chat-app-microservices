@@ -26,13 +26,9 @@ public class RouteLocatorConfiguration {
                         )
                         .uri("lb://ms-users-service"))
                 .route("chat-service-sockjs", r -> r
-                        .path("/ws/info/**")
-                        .uri("http://localhost:8080")
+                        .path("/ws/**")
+                        .uri("lb:ws://MS-CHAT-SERVICE")
                 )
-//                .route("chat-service", r -> r
-//                        .path("/ws/**")
-//                        .uri("lb:ws://ms-chat-service")
-//                )
                 .build();
     }
 

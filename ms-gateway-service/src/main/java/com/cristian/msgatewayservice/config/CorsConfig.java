@@ -7,7 +7,7 @@ import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
 @Configuration
-public class CorsConfig {
+public class CorsConfig  {
 
     @Bean
     public CorsWebFilter corsFilter() {
@@ -18,7 +18,10 @@ public class CorsConfig {
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
+
+        // Apply CORS configuration to all the endpoints except websockets
+        source.registerCorsConfiguration("/chat/**", config);
+//        source.registerCorsConfiguration("/api/**", config);
 
         return new CorsWebFilter(source);
     }

@@ -24,7 +24,7 @@ const drawerWidth = 240;
 const navItems = [
   { name: 'Login', route: AppRoutes.public.login },
   { name: 'Dashboard', route: AppRoutes.private.dashboard },
-  { name: 'Chat', route: AppRoutes.private.chat},
+  { name: 'Chat', route: AppRoutes.private.chat },
 ];
 
 const NavBar = (props: Props) => {

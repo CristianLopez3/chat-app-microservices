@@ -1,7 +1,4 @@
-import Container from '@mui/material/Container';
-import { Box, Toolbar, Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
-import { AppRoutes } from '../../models';
+import { Box,  Typography } from '@mui/material';
 import NavBar from '@/components/NavBar/NavBar';
 
 const Home = () => {

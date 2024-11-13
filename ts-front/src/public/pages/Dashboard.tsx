@@ -1,6 +1,9 @@
 import { RootState } from "@/store/store";
 import { Box, Container, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
+import App from "./App";
+import { AppRoutes } from "@/models";
+import { Link } from "react-router-dom";
 
 const Dashboard: React.FC = () => {
     const user = useSelector((state: RootState) => state.user.user);
@@ -22,6 +25,7 @@ const Dashboard: React.FC = () => {
               <Typography variant="h6" component="h2">
                 Welcome, {user.name}!
               </Typography>
+              <Link to={AppRoutes.private.chat} >CHAT </Link>
             </Box>
           )}
         </Box>
