@@ -7,7 +7,6 @@ import com.cristian.msusersservice.exception.UserNotFoundException;
 import com.cristian.msusersservice.mapper.UserMapper;
 import com.cristian.msusersservice.model.User;
 import com.cristian.msusersservice.repository.UserRepository;
-import com.cristian.msusersservice.service.AuthService;
 import com.cristian.msusersservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -18,11 +17,11 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService, AuthService {
+public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
+
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
-
+    private final UserRepository userRepository;
 
     @Override
     public UserResponseDto get(Long id) {
@@ -53,17 +52,17 @@ public class UserServiceImpl implements UserService, AuthService {
 
     @Override
     public void update(Long id, UserRequestDto userRequestDto) {
+        var user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User with id" + id + " not found"));
+        user.setName(userRequestDto.name());
+        user.setLastname(userRequestDto.lastname());
+        user.setUsername(userRequestDto.username());
+
+        userRepository.save(user);
+        logger.debug("Update user: {}", user);
 
     }
 
-    @Override
-    public UserResponseDto login(LoginRequestDto loginRequestDto) {
-        var user = userRepository.findByUsername(loginRequestDto.username())
-                .orElseThrow(
-                        () -> new UserNotFoundException(String.format("User with username: %s, does not exists",
-                                loginRequestDto.username())));
-        return UserMapper.toUserResponseDto(user);
-    }
 
 
 }

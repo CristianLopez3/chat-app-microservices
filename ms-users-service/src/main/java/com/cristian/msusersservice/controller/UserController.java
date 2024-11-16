@@ -23,7 +23,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    private final static Logger logger = LoggerFactory.getLogger(UserController.class);
+    private static final  Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @GetMapping
     public ResponseEntity<List<UserResponseDto>> getUsers(){
@@ -39,6 +39,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserResponseDto> createUser(@RequestBody UserRequestDto userRequestDto){
+        logger.debug("Creating user with data: {}", userRequestDto);
         var userResponse = userService.create(userRequestDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)

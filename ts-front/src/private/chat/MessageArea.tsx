@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Client, over } from "stompjs";
 import SockJS from 'sockjs-client';
 import ChatBox from "./ChatBox";
-import Register from "./Register";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 
@@ -119,10 +118,6 @@ const MessageArea: React.FC = () => {
     setUserData({ ...userData, message: value });
   };
 
-  const handleUsernameInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    setUserData({ ...userData, username: value });
-  };
 
   useEffect(() => {
     connect();
@@ -130,7 +125,6 @@ const MessageArea: React.FC = () => {
 
   return (
     <div className="container">
-      {/* {userData.connected ? (
         <ChatBox
           chatArea={chatArea}
           setChatArea={setChatArea}
@@ -141,24 +135,6 @@ const MessageArea: React.FC = () => {
           sendPublicMessage={sendPublicMessage}
           sendPrivateMessage={sendPrivateMessage}
         />
-      ) : (
-        <Register
-          userData={userData}
-          handleUsernameInput={handleUsernameInput}
-          registerUser={registerUser}
-        />
-      )} */}
-        <ChatBox
-          chatArea={chatArea}
-          setChatArea={setChatArea}
-          privateMessage={privateMessage}
-          publicMessage={publicMessage}
-          userData={userData}
-          handleMessageInput={handleMessageInput}
-          sendPublicMessage={sendPublicMessage}
-          sendPrivateMessage={sendPrivateMessage}
-        />
-      
     </div>
   );
 };

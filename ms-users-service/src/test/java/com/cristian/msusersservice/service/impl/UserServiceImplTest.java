@@ -1,11 +1,14 @@
 package com.cristian.msusersservice.service.impl;
 
 import com.cristian.msusersservice.dto.LoginRequestDto;
+import com.cristian.msusersservice.dto.UserRequestDto;
 import com.cristian.msusersservice.dto.UserResponseDto;
 import com.cristian.msusersservice.exception.UserNotFoundException;
+import com.cristian.msusersservice.mapper.UserMapper;
 import com.cristian.msusersservice.model.User;
 import com.cristian.msusersservice.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,6 +28,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -73,48 +77,27 @@ class UserServiceImplTest {
     }
 
     @Test
+    @Disabled
     void create() {
+        UserRequestDto userRequest = UserRequestDto.builder()
+                .name("Jhonatan")
+                .username("John_natan")
+                .build();
+
+
+        when(userRepository.save(mockUser)).thenReturn(mockUser);
+
+        userServiceImpl.create(userRequest);
+
+        verify(userRepository).save(any(User.class));
     }
 
     @Test
     void update() {
     }
 
-    @Test
-    void login() {
-        // given
-        var loginRequestDto = LoginRequestDto.builder()
-                .username(mockUser.getUsername())
-                .password(mockUser.getPassword()).build();
 
-        // when
-        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(mockUser));
 
-        UserResponseDto result = userServiceImpl.login(loginRequestDto);
-
-        // then
-        verify(userRepository).findByUsername(anyString());
-        assertNotNull(result);
-        assertThat(result.username(), is("john.doe@example.com"));
-    }
-
-    @Test
-    void loginFailedWith404() {
-        // given
-        var loginRequestDto = LoginRequestDto.builder()
-                .username(mockUser.getUsername()).build();
-
-        // when
-        when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
-
-        // then
-        UserNotFoundException exception = assertThrows(UserNotFoundException.class, () -> {
-            userServiceImpl.login(loginRequestDto);
-        });
-
-        assertEquals("User with username: john.doe@example.com, does not exists", exception.getMessage());
-        verify(userRepository).findByUsername(anyString());
-    }
 
 
 

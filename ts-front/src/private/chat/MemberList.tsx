@@ -1,3 +1,4 @@
+import { Button } from "@mui/material";
 import React from "react";
 
 type MemberListProps = {
@@ -10,24 +11,30 @@ const MemberList: React.FC<MemberListProps> = ({ chatArea, setChatArea, privateM
   return (
     <div className="member-list">
       <ul>
-        <li
+        <Button
           onClick={() => {
             setChatArea("PUBLIC");
           }}
+          variant="contained"
+          color="primary"
+          fullWidth
           className={`member ${chatArea === "PUBLIC" && "active"}`}
         >
           PUBLIC CHAT
-        </li>
+        </Button>
         {[...privateMessage.keys()].map((name, index) => (
-          <li
+          <Button
+            type="button"
+            fullWidth
+            variant="contained"
+            color="primary"
+            sx={{ my: 1 }}
             onClick={() => {
               setChatArea(name);
             }}
             className={`member ${chatArea === name && "active"}`}
             key={index}
-          >
-            {name}
-          </li>
+          > {name} </Button>
         ))}
       </ul>
     </div>
