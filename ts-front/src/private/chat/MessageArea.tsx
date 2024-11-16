@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Client, over } from "stompjs";
 import SockJS from 'sockjs-client';
 import ChatBox from "./ChatBox";
 import Register from "./Register";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 
 let stompClient: Client;
@@ -15,11 +17,13 @@ type Payload = {
 }
 
 const MessageArea: React.FC = () => {
+  const user = useSelector((state: RootState) => state.user.user);
+
   const [privateMessage, setPrivateMessage] = useState<Map<string, Payload[]>>(new Map());
   const [publicMessage, setPublicMessage] = useState<Payload[]>([]);
   const [chatArea, setChatArea] = useState<string>("PUBLIC");
   const [userData, setUserData] = useState({
-    username: "",
+    username: user.username,
     recievername: "",
     message: "",
     connected: false,
@@ -120,9 +124,13 @@ const MessageArea: React.FC = () => {
     setUserData({ ...userData, username: value });
   };
 
+  useEffect(() => {
+    connect();
+  }, [])
+
   return (
     <div className="container">
-      {userData.connected ? (
+      {/* {userData.connected ? (
         <ChatBox
           chatArea={chatArea}
           setChatArea={setChatArea}
@@ -139,7 +147,18 @@ const MessageArea: React.FC = () => {
           handleUsernameInput={handleUsernameInput}
           registerUser={registerUser}
         />
-      )}
+      )} */}
+        <ChatBox
+          chatArea={chatArea}
+          setChatArea={setChatArea}
+          privateMessage={privateMessage}
+          publicMessage={publicMessage}
+          userData={userData}
+          handleMessageInput={handleMessageInput}
+          sendPublicMessage={sendPublicMessage}
+          sendPrivateMessage={sendPrivateMessage}
+        />
+      
     </div>
   );
 };

@@ -22,9 +22,10 @@ interface Props {
 
 const drawerWidth = 240;
 const navItems = [
-  { name: 'Login', route: AppRoutes.public.login },
   { name: 'Dashboard', route: AppRoutes.private.dashboard },
   { name: 'Chat', route: AppRoutes.private.chat },
+  { name: 'SignUp', route: AppRoutes.public.signUp},
+  { name: 'Login', route: AppRoutes.public.login },
 ];
 
 const NavBar = (props: Props) => {

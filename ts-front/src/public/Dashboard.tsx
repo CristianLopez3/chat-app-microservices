@@ -1,7 +1,6 @@
 import { RootState } from "@/store/store";
 import { Box, Container, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
-import App from "./App";
 import { AppRoutes } from "@/models";
 import { Link } from "react-router-dom";
 

@@ -2,27 +2,28 @@ import { useState, useEffect } from 'react';
 import { Container, TextField, Button, Box, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { loginUserAction } from '@/store/users';
 import { AppDispatch, RootState } from '@/store/store';
+import { AppRoutes } from '@/models';
+import { signUpUserAction } from '@/store/users';
 
-const Login: React.FC = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+const SignUp = () => {
+  const [name, setName] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { isLoading, user, error } = useSelector((state: RootState) => state.user);
 
   const handleSubmit = (event: React.FormEvent) => {
-    console.log("Mading a call: " + isLoading, user, error);
+    console.log("Mading a call: " + name, lastname, username, password);
     event.preventDefault();
-    dispatch(loginUserAction({ username, password }));
+    dispatch(signUpUserAction({ name, lastname, username, password }));
   };
 
   useEffect(() => {
-    
-    console.log("Mading a call: " + isLoading, user, error);
     if (user) {
-      navigate('/dashboard');
+      navigate(AppRoutes.public.login);
     }
   }, [user, navigate]);
 
@@ -36,15 +37,39 @@ const Login: React.FC = () => {
         minHeight="100vh"
       >
         <Typography variant="h4" component="h1" gutterBottom>
-          Login
+          Sign Up
         </Typography>
         <Box component="form" noValidate autoComplete="off" onSubmit={handleSubmit}>
           <TextField
             margin="normal"
             required
             fullWidth
+            id="name"
+            label="Name"
+            name="name"
+            autoComplete="name"
+            autoFocus
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="lastname"
+            label="Lastname"
+            name="lastname"
+            autoComplete="lastname"
+            autoFocus
+            value={lastname}
+            onChange={(e) => setLastname(e.target.value)}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
             id="username"
-            label="Email Address"
+            label="Username"
             name="username"
             autoComplete="username"
             autoFocus
@@ -71,13 +96,13 @@ const Login: React.FC = () => {
             sx={{ mt: 3, mb: 2 }}
             disabled={isLoading}
           >
-            {isLoading ? 'Signing In...' : 'Sign In'}
+            {isLoading ? 'Registering...' : 'Register'}
           </Button>
           {error && <Typography color="error">{error}</Typography>}
         </Box>
       </Box>
     </Container>
   );
-};
+}
 
-export default Login;
+export default SignUp;

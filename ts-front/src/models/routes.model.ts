@@ -6,6 +6,7 @@ export const AppRoutes = {
     dashboard: '/dashboard'
   },
   public: {
-    login: '/login'
+    login: '/login',
+    signUp: '/signup'
   }
 }

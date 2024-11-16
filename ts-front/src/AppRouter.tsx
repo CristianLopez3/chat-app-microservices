@@ -1,11 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
 import { AppRoutes } from "./models";
-import Home from "./public/pages/Home";
-import Login from "./public/pages/Login";
-import MessageArea from "./public/chat/MessageArea";
-import Dashboard from "./public/pages/Dashboard";
-
-
+import Home from "@/public/Home";
+import MessageArea from "@/private/chat/MessageArea";
+import Dashboard from "./public/Dashboard";
+import SignUp from "./public/SignUp";
+import Login from "./public/Login";
 
 export const router = createBrowserRouter([
   {
@@ -23,5 +22,9 @@ export const router = createBrowserRouter([
   {
     path: AppRoutes.public.login,
     element: <Login />
+  },
+  {
+    path: AppRoutes.public.signUp,
+    element: <SignUp />
   }
 ])
