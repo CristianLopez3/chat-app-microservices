@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: ms-messages-service
+  data:
+    mongodb:
+      auto-index-creation: true
+      authentication-database: admin
+      username: dbadmin
+      password: mysecretpassword
+      database: messagesdb
+      port: 27017
+      host: localhost
+
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          mongodb:
+            core:
+              MongoTemplate: DEBUG
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8765/eureka/
+
+server:
+  port: 8585
