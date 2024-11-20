@@ -1,20 +1,35 @@
 version: '3.8'
+
 services:
   mongodb:
     image: mongo:6-jammy
-    container_name: mongodb
-    ports:
-      - '27017:27017'
-    volumes:
-      - dbdata6:/data/db
-      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
+    container_name: mongo-container
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: 12345678
-      MONGO_INITDB_DATABASE: messagesdb
-    command:
-      - '--logpath'
-      - '/var/log/mongodb/mongod.log'
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password123
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - mongo-net
+
+  mongo-express:
+    image: mongo-express:1.0
+    container_name: mongo-express-container
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: password123
+      ME_CONFIG_MONGODB_SERVER: mongodb
+    ports:
+      - "8081:8081"
+    networks:
+      - mongo-net
+
 volumes:
-  dbdata6:
+  mongo-data:
+
+networks:
+  mongo-net:
+
 # docker exec -it some-mongo bash

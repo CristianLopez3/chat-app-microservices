@@ -3,13 +3,13 @@ spring:
     name: ms-messages-service
   data:
     mongodb:
-      auto-index-creation: true
-      authentication-database: admin
-      username: dbadmin
-      password: mysecretpassword
-      database: messagesdb
-      port: 27017
       host: localhost
+      port: 27017
+      database: messagesdb
+      username: admin
+      password: password123
+      authentication-database: admin
+
 
 logging:
   level:
@@ -19,7 +19,6 @@ logging:
           mongodb:
             core:
               MongoTemplate: DEBUG
-
 eureka:
   instance:
     prefer-ip-address: true

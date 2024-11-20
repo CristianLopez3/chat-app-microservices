@@ -6,14 +6,14 @@ import com.cristian.messages.model.Message;
 
 public final class MessageMapper {
 
-    private MessageMapper() {
-    }
+    private MessageMapper() {}
 
     public static Message toMessage(RequestMessageDto requestMessageDto){
         return Message.builder()
                 .message(requestMessageDto.message())
                 .sender(requestMessageDto.sender())
                 .receiver(requestMessageDto.receiver())
+                .sendDate(requestMessageDto.sendDate())
                 .build();
     }
 
@@ -22,6 +22,7 @@ public final class MessageMapper {
                 .message(message.getMessage())
                 .receiver(message.getReceiver())
                 .sender(message.getSender())
+                .sendDate(message.getSendDate())
                 .build();
     }
 

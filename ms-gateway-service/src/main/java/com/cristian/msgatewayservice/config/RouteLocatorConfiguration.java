@@ -21,10 +21,18 @@ public class RouteLocatorConfiguration {
                                  *  would redirect to
                                  *  http://localhost:8080/api/v1/users
                                  */
-                                .rewritePath("/chat/(?<segment>.*)", "/api/${segment}")
+                                .rewritePath("/chat/(?<segment>.*)", "/${segment}")
                                 .addResponseHeader("X-response-time", LocalDateTime.now().toString())
                         )
                         .uri("lb://ms-users-service"))
+                .route("messages-service", r -> r
+                        .path("/chat/messages/**")
+                        .filters(f -> f
+                                .rewritePath("/chat/(?<segment>.*)", "/${segment}")
+                                .addResponseHeader("X-response-time", LocalDateTime.now().toString())
+                        )
+                        .uri("lb://ms-messages-service")
+                )
                 .route("chat-service-sockjs", r -> r
                         .path("/ws/**")
                         .uri("lb:ws://MS-CHAT-SERVICE")

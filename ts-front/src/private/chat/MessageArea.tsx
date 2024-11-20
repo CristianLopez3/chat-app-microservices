@@ -33,7 +33,6 @@ const MessageArea: React.FC = () => {
   };
 
   const connect = () => {
-    // console.info("Try to connect in: " + WS_URL as string)
     let sock = new SockJS("http://localhost:8089/ws");
     stompClient = over(sock);
     stompClient.connect({}, onConnect, onError);

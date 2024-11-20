@@ -6,6 +6,14 @@ meta {
 
 post {
   url: http://localhost:8585/messages
-  body: none
+  body: json
   auth: none
+}
+
+body:json {
+  {
+    "receiver": "Cristian",
+    "sender": "Daniel",
+    "message": "Hi Cristian"
+  }
 }

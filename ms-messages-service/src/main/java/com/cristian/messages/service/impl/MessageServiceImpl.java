@@ -7,6 +7,7 @@ import com.cristian.messages.repository.MessageRepository;
 import com.cristian.messages.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -23,5 +24,8 @@ public class MessageServiceImpl implements MessageService {
                 .map(MessageMapper::toRequestMessageDto);
     }
 
+    public Flux<Message> getAll(){
+        return messageRepository.findAll();
+    }
 
 }
