@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Client, over } from "stompjs";
 import SockJS from 'sockjs-client';
 import ChatBox from "./ChatBox";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
+import { addMessage } from "@/store/messages/message.actions";
+import { Box } from "@mui/material";
 
 
 let stompClient: Client;
@@ -15,8 +17,10 @@ type Payload = {
   status: string;
 }
 
-const MessageArea: React.FC = () => {
+const Chat: React.FC = () => {
   const user = useSelector((state: RootState) => state.user.user);
+  const messages = useSelector((state: RootState) => state.messages.messages);
+  const dispatch = useDispatch<AppDispatch>();
 
   const [privateMessage, setPrivateMessage] = useState<Map<string, Payload[]>>(new Map());
   const [publicMessage, setPublicMessage] = useState<Payload[]>([]);
@@ -40,7 +44,13 @@ const MessageArea: React.FC = () => {
 
   const onConnect = () => {
     setUserData({ ...userData, connected: true });
-    stompClient.subscribe("/chatroom/public", onPublicMessageReceived);
+    stompClient.subscribe("/chatroom/public", (payload: { body: string }) => {
+      let count = 0;
+      console.log("Data received: ", payload.body);
+      console.info('Message number: ' + count++);
+      console.log("Length of publicMessage: ", publicMessage.length)
+      onPublicMessageReceived(payload);
+    });
     stompClient.subscribe("/user/" + userData.username + "/private", onPrivateMessageReceived);
     userJoin();
   };
@@ -59,7 +69,9 @@ const MessageArea: React.FC = () => {
         }
         break;
       case "MESSAGE":
+        // console.table(publicMessage);
         publicMessage.push(payloadData);
+        addMessage(payloadData);
         setPublicMessage([...publicMessage]);
         break;
     }
@@ -123,19 +135,23 @@ const MessageArea: React.FC = () => {
   }, [])
 
   return (
-    <div className="container">
-        <ChatBox
-          chatArea={chatArea}
-          setChatArea={setChatArea}
-          privateMessage={privateMessage}
-          publicMessage={publicMessage}
-          userData={userData}
-          handleMessageInput={handleMessageInput}
-          sendPublicMessage={sendPublicMessage}
-          sendPrivateMessage={sendPrivateMessage}
-        />
-    </div>
+    <Box
+      minWidth="70%"
+      minHeight="100%"
+      sx={{border: "1px solid black"}}
+    >
+      <ChatBox
+        chatArea={chatArea}
+        setChatArea={setChatArea}
+        privateMessage={privateMessage}
+        publicMessage={messages}
+        userData={userData}
+        handleMessageInput={handleMessageInput}
+        sendPublicMessage={sendPublicMessage}
+        sendPrivateMessage={sendPrivateMessage}
+      />
+    </Box>
   );
 };
 
-export default MessageArea;
+export default Chat;

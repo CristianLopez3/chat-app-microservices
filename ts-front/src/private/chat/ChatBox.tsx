@@ -1,6 +1,7 @@
 import React from "react";
 import MemberList from "./MemberList";
 import ChatContent from "./ChatContent";
+import { Box } from "@mui/material";
 
 type ChatBoxProps = {
   chatArea: string;
@@ -24,12 +25,15 @@ const ChatBox: React.FC<ChatBoxProps> = ({
   sendPrivateMessage,
 }) => {
   return (
-    <div className="chat-box">
-      <MemberList
-        chatArea={chatArea}
-        setChatArea={setChatArea}
-        privateMessage={privateMessage}
-      />
+    <Box
+      sx={{
+        minHeight: "100vh",
+        component: "section",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+      }}
+    >
       <ChatContent
         chatArea={chatArea}
         privateMessage={privateMessage}
@@ -39,7 +43,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({
         sendPublicMessage={sendPublicMessage}
         sendPrivateMessage={sendPrivateMessage}
       />
-    </div>
+    </Box>
   );
 };
 

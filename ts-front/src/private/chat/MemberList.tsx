@@ -1,43 +1,51 @@
-import { Button } from "@mui/material";
 import React from "react";
+import { Button, List } from "@mui/material";
+import { ChatButton } from "@/components/Button";
+import { ChatMember } from "@/models";
 
 type MemberListProps = {
+  members: ChatMember[];
   chatArea: string;
   setChatArea: React.Dispatch<React.SetStateAction<string>>;
-  privateMessage: Map<string, any[]>;
+  onChatSelect: (member: ChatMember) => void;
+  setChats: (chats: ChatMember[]) => void;
 };
 
-const MemberList: React.FC<MemberListProps> = ({ chatArea, setChatArea, privateMessage }) => {
+const MemberList: React.FC<MemberListProps> = ({
+  members,
+  chatArea,
+  setChatArea,
+  onChatSelect,
+  setChats
+}) => {
+
+  const handleChatSelect = (member: ChatMember) => {
+    const updatedChats = members.map(chat => ({
+      ...chat,
+      selected: chat.id === member.id,
+    }));
+    setChats(updatedChats);
+    onChatSelect(member);
+  };
+
   return (
-    <div className="member-list">
-      <ul>
-        <Button
-          onClick={() => {
-            setChatArea("PUBLIC");
-          }}
-          variant="contained"
-          color="primary"
-          fullWidth
-          className={`member ${chatArea === "PUBLIC" && "active"}`}
-        >
-          PUBLIC CHAT
-        </Button>
-        {[...privateMessage.keys()].map((name, index) => (
-          <Button
-            type="button"
-            fullWidth
-            variant="contained"
-            color="primary"
-            sx={{ my: 1 }}
-            onClick={() => {
-              setChatArea(name);
-            }}
-            className={`member ${chatArea === name && "active"}`}
-            key={index}
-          > {name} </Button>
-        ))}
-      </ul>
-    </div>
+    <List sx={{ width: '90%', ml: 1 }}>
+      <Button
+        fullWidth
+        onClick={() => setChatArea("PUBLIC")}
+        variant="contained"
+        color="primary"
+        className={`member ${chatArea === "PUBLIC" && "active"}`}
+      >
+        PUBLIC CHAT
+      </Button>
+      {members.map((member: ChatMember) => (
+        <ChatButton
+          member={member}
+          onChatSelect={handleChatSelect}
+        />
+      ))}
+    </List>
   );
 };
 

@@ -1,29 +1,28 @@
-import { ChatItem } from "@/models"
-import { List } from "@mui/material"
-import { ChatButton } from "../Button"
-import { useState } from "react"
+import React, { useState } from 'react';
+import { List } from '@mui/material';
+import { ChatButton } from '../Button';
+import { ChatMember } from '@/models';
 
-type ChatListProps ={
-  items: ChatItem[]
-}
 
-export const ChatList: React.FC<ChatListProps> = ({ items }) => {
+type ChatListProps = {
+  members: ChatMember[];
+  onChatSelect: (member: ChatMember) => void;
+};
+
+export const ChatList: React.FC<ChatListProps> = ({ members, onChatSelect }) => {
   const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
 
-  const handleChatClick = (id: string) => {
-    setSelectedChatId(id);
+  const handleChatClick = (member: ChatMember) => {
+    setSelectedChatId(member.id);
+    onChatSelect(member);
   };
 
   return (
     <List sx={{ width: '90%', ml: 1 }}>
-      {items.map((item) => (
+      {members.map((member) => (
         <ChatButton
-          key={item.id}
-          id={item.id}
-          name={item.name}
-          lastMessage={item.lastMessage}
-          selected={item.id === selectedChatId}
-          onClick={handleChatClick}
+          member={member}
+          onChatSelect={handleChatClick}
         />
       ))}
     </List>

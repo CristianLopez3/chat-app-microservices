@@ -1,26 +1,30 @@
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Typography from '@mui/material/Typography';
-import { StringAvatar } from '../avatar';
-
+import React, { useEffect } from 'react';
+import { ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material';
+import { StringAvatar } from '../avatar'; // Asegúrate de importar StringAvatar correctamente
+import { ChatMember } from '@/models';
 
 type ChatButtonProps = {
-  id: string;
-  name: string;
-  lastMessage: string;
-  selected: boolean;
-  onClick: (id: string) => void;
+  member: ChatMember
+  onChatSelect: (member: ChatMember) => void;
 };
 
+export const ChatButton: React.FC<ChatButtonProps> = ({member, onChatSelect }) => {
+  const { id, name, lastMessage, selected } = member;
 
-export const ChatButton: React.FC<ChatButtonProps> = ({ id, name, lastMessage, selected, onClick }) => {
   return (
     <ListItem
       key={id}
       alignItems="flex-start"
-      sx={{ bgcolor: selected ? '#eeeef8' : '#f9fafc', borderRadius: 3, cursor: 'pointer' }}
-      onClick={() => onClick(id)}
+      sx={{
+        bgcolor: selected ? '#ddddee' : '#f9fafc',
+        borderRadius: 3,
+        cursor: 'pointer',
+        '&:hover': {
+          bgcolor: selected ? '#ddddee' : '#f0f0f5',
+        },
+        width: '100%',
+      }}
+      onClick={() => onChatSelect(member)}
     >
       <ListItemAvatar>
         <StringAvatar name={name} />

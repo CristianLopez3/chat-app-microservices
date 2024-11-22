@@ -1,10 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
 import { AppRoutes } from "./models";
 import Home from "@/public/Home";
-import MessageArea from "@/private/chat/MessageArea";
 import Dashboard from "./public/Dashboard";
 import SignUp from "./public/SignUp";
 import Login from "./public/Login";
+import { Chat } from "@mui/icons-material";
 
 export const router = createBrowserRouter([
   {
@@ -13,7 +13,7 @@ export const router = createBrowserRouter([
   },
   {
     path: AppRoutes.private.chat,
-    element: <MessageArea />
+    element: <Chat />
   },
   {
     path: AppRoutes.private.dashboard,
