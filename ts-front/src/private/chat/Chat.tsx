@@ -6,31 +6,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { addMessage } from "@/store/messages/message.actions";
 import { Box } from "@mui/material";
+import { ChatMember, ChatPayload, ChatUserData } from "@/models";
 
 
 let stompClient: Client;
 
-type Payload = {
-  senderName: string;
-  receiverName: string;
-  message: string;
-  status: string;
+type ChatProps = {
+  userData: ChatUserData;
+  setUserData: (userData: ChatUserData) => void;
+  selected?: ChatMember;
 }
 
-const Chat: React.FC = () => {
+const Chat: React.FC<ChatProps> = ({ selected, userData, setUserData }) => {
   const user = useSelector((state: RootState) => state.user.user);
   const messages = useSelector((state: RootState) => state.messages.messages);
   const dispatch = useDispatch<AppDispatch>();
-
-  const [privateMessage, setPrivateMessage] = useState<Map<string, Payload[]>>(new Map());
-  const [publicMessage, setPublicMessage] = useState<Payload[]>([]);
-  const [chatArea, setChatArea] = useState<string>("PUBLIC");
-  const [userData, setUserData] = useState({
-    username: user.username,
-    recievername: "",
-    message: "",
-    connected: false,
-  });
+  const [privateMessage, setPrivateMessage] = useState<Map<string, ChatPayload[]>>(new Map());
+  const [publicMessage, setPublicMessage] = useState<ChatPayload[]>([]);
 
   const registerUser = () => {
     connect();
@@ -60,7 +52,7 @@ const Chat: React.FC = () => {
   };
 
   const onPublicMessageReceived = (payload: { body: string }) => {
-    let payloadData: Payload = JSON.parse(payload.body);
+    let payloadData: ChatPayload = JSON.parse(payload.body);
     switch (payloadData.status) {
       case "JOIN":
         if (!privateMessage.get(payloadData.senderName)) {
@@ -69,9 +61,7 @@ const Chat: React.FC = () => {
         }
         break;
       case "MESSAGE":
-        // console.table(publicMessage);
         publicMessage.push(payloadData);
-        addMessage(payloadData);
         setPublicMessage([...publicMessage]);
         break;
     }
@@ -110,14 +100,14 @@ const Chat: React.FC = () => {
     if (stompClient) {
       let chatMessage = {
         senderName: userData.username,
-        receiverName: chatArea,
+        receiverName: userData.recievername,
         message: userData.message,
         status: "MESSAGE",
       };
-      if (!privateMessage.get(chatArea)) {
-        privateMessage.set(chatArea, []);
+      if (!privateMessage.get(userData.recievername)) {
+        privateMessage.set(userData.recievername, []);
       }
-      privateMessage.get(chatArea)?.push(chatMessage);
+      privateMessage.get(userData.recievername)?.push(chatMessage);
       setPrivateMessage(new Map(privateMessage));
       stompClient.send("/app/private-message", {}, JSON.stringify(chatMessage));
       setUserData({ ...userData, message: "" });
@@ -136,13 +126,10 @@ const Chat: React.FC = () => {
 
   return (
     <Box
-      minWidth="70%"
+      minWidth="100%"
       minHeight="100%"
-      sx={{border: "1px solid black"}}
     >
       <ChatBox
-        chatArea={chatArea}
-        setChatArea={setChatArea}
         privateMessage={privateMessage}
         publicMessage={messages}
         userData={userData}

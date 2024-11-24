@@ -13,7 +13,7 @@ export const ChatButton: React.FC<ChatButtonProps> = ({member, onChatSelect }) =
 
   return (
     <ListItem
-      key={id}
+      key={id + Math.random()}
       alignItems="flex-start"
       sx={{
         bgcolor: selected ? '#ddddee' : '#f9fafc',

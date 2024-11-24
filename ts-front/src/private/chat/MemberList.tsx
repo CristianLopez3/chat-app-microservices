@@ -1,20 +1,17 @@
 import React from "react";
-import { Button, List } from "@mui/material";
+import { Button, List, ListItemAvatar, Typography } from "@mui/material";
 import { ChatButton } from "@/components/Button";
 import { ChatMember } from "@/models";
+import { StringAvatar } from "@/components/avatar";
 
 type MemberListProps = {
   members: ChatMember[];
-  chatArea: string;
-  setChatArea: React.Dispatch<React.SetStateAction<string>>;
   onChatSelect: (member: ChatMember) => void;
   setChats: (chats: ChatMember[]) => void;
 };
 
 const MemberList: React.FC<MemberListProps> = ({
   members,
-  chatArea,
-  setChatArea,
   onChatSelect,
   setChats
 }) => {
@@ -32,11 +29,13 @@ const MemberList: React.FC<MemberListProps> = ({
     <List sx={{ width: '90%', ml: 1 }}>
       <Button
         fullWidth
-        onClick={() => setChatArea("PUBLIC")}
         variant="contained"
         color="primary"
-        className={`member ${chatArea === "PUBLIC" && "active"}`}
+        sx={{borderRadius: "13px"}}
       >
+        <ListItemAvatar>
+          <StringAvatar name="PUBLIC CHAT" />
+        </ListItemAvatar>
         PUBLIC CHAT
       </Button>
       {members.map((member: ChatMember) => (
@@ -45,6 +44,9 @@ const MemberList: React.FC<MemberListProps> = ({
           onChatSelect={handleChatSelect}
         />
       ))}
+      <Typography variant="h6" sx={{ ml: 1, mt: 2 }}>
+        {members.filter(member => member.selected).map(member => member.name)}
+      </Typography>
     </List>
   );
 };

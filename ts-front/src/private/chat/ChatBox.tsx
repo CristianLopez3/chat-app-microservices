@@ -1,22 +1,18 @@
 import React from "react";
-import MemberList from "./MemberList";
 import ChatContent from "./ChatContent";
 import { Box } from "@mui/material";
+import { ChatPayload, ChatUserData } from "@/models";
 
 type ChatBoxProps = {
-  chatArea: string;
-  setChatArea: React.Dispatch<React.SetStateAction<string>>;
   privateMessage: Map<string, any[]>;
-  publicMessage: any[];
-  userData: any;
+  publicMessage: ChatPayload[];
+  userData: ChatUserData;
   handleMessageInput: (event: React.ChangeEvent<HTMLInputElement>) => void;
   sendPublicMessage: () => void;
   sendPrivateMessage: () => void;
 };
 
 const ChatBox: React.FC<ChatBoxProps> = ({
-  chatArea,
-  setChatArea,
   privateMessage,
   publicMessage,
   userData,
@@ -31,11 +27,11 @@ const ChatBox: React.FC<ChatBoxProps> = ({
         component: "section",
         display: "flex",
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        minWidth: "100%",
       }}
     >
       <ChatContent
-        chatArea={chatArea}
         privateMessage={privateMessage}
         publicMessage={publicMessage}
         userData={userData}
