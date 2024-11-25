@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class MessageServiceImpl implements MessageService {
@@ -20,12 +23,28 @@ public class MessageServiceImpl implements MessageService {
     public Mono<RequestMessageDto> saveMessage(RequestMessageDto requestMessageDto) {
         return Mono.just(requestMessageDto)
                 .map(MessageMapper::toMessage)
-                .flatMap(messageRepository::insert)
+                .map(message -> {
+                    message.setSendDate(LocalDateTime.now());
+                    return message;
+                })
+                .flatMap(messageRepository::save)
                 .map(MessageMapper::toRequestMessageDto);
     }
 
+    @Override
     public Flux<Message> getAll(){
         return messageRepository.findAll();
+    }
+
+    @Override
+    public Mono<List<String>> getUserConversations(String userId) {
+        return messageRepository.findBySenderIdOrReceiverId(userId, userId)
+                .map(message ->
+                        message.getSenderId().equals(userId)
+                                ? message.getReceiverId()
+                                : message.getSenderId())
+                .distinct()
+                .collectList();
     }
 
 }

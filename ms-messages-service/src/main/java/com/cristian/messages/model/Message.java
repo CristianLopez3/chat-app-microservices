@@ -1,6 +1,7 @@
 package com.cristian.messages.model;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,18 +22,19 @@ public class Message {
     @Id
     private String id;
     private String message;
-    private String sender;
-    private String receiver;
+    private String senderId;
+    private String receiverId;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime sendDate;
 
     @Override
     public String toString() {
         return "Message{" +
-                    "id='" + id + '\'' +
-                    ", message='" + message + '\'' +
-                    ", sender='" + sender + '\'' +
-                    ", receiver='" + receiver + '\'' +
-                    ", sendDate=" + sendDate + '\'' +
+                "id='" + id + '\'' +
+                ", message='" + message + '\'' +
+                ", senderId='" + senderId + '\'' +
+                ", receiverId='" + receiverId + '\'' +
+                ", sendDate=" + sendDate +
                 '}';
     }
 

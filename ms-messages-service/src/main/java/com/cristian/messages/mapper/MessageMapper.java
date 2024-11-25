@@ -11,8 +11,8 @@ public final class MessageMapper {
     public static Message toMessage(RequestMessageDto requestMessageDto){
         return Message.builder()
                 .message(requestMessageDto.message())
-                .sender(requestMessageDto.sender())
-                .receiver(requestMessageDto.receiver())
+                .senderId(requestMessageDto.senderId())
+                .receiverId(requestMessageDto.receiverId())
                 .sendDate(requestMessageDto.sendDate())
                 .build();
     }
@@ -20,8 +20,8 @@ public final class MessageMapper {
     public static RequestMessageDto toRequestMessageDto(Message message){
         return RequestMessageDto.builder()
                 .message(message.getMessage())
-                .receiver(message.getReceiver())
-                .sender(message.getSender())
+                .receiverId(message.getReceiverId())
+                .senderId(message.getSenderId())
                 .sendDate(message.getSendDate())
                 .build();
     }
