@@ -1,19 +1,19 @@
-import React, { useEffect } from 'react';
 import { ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material';
 import { StringAvatar } from '../avatar'; // Asegúrate de importar StringAvatar correctamente
-import { ChatMember } from '@/models';
+import { ChatMember, UserResponse } from '@/models';
 
 type ChatButtonProps = {
-  member: ChatMember
-  onChatSelect: (member: ChatMember) => void;
+  member: UserResponse;
+  selected: boolean;
+  onChatSelect: (member: UserResponse) => void;
 };
 
-export const ChatButton: React.FC<ChatButtonProps> = ({member, onChatSelect }) => {
-  const { id, name, lastMessage, selected } = member;
+export const ChatButton: React.FC<ChatButtonProps> = ({member, selected, onChatSelect }) => {
+  const { userId, name, username } = member;
 
   return (
     <ListItem
-      key={id + Math.random()}
+      key={userId + Math.random()}
       alignItems="flex-start"
       sx={{
         bgcolor: selected ? '#ddddee' : '#f9fafc',
@@ -40,7 +40,7 @@ export const ChatButton: React.FC<ChatButtonProps> = ({member, onChatSelect }) =
               color='#969495'
               sx={{ color: 'text', display: 'inline' }}
             >
-              {lastMessage}
+              {username}
             </Typography>
           </>
         }

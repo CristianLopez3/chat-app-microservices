@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { addMessage } from "@/store/messages/message.actions";
 import { Box } from "@mui/material";
-import { ChatMember, ChatPayload, ChatUserData } from "@/models";
+import { ChatMember, ChatPayload, ChatUserData, UserResponse } from "@/models";
 
 
 let stompClient: Client;
@@ -14,7 +14,7 @@ let stompClient: Client;
 type ChatProps = {
   userData: ChatUserData;
   setUserData: (userData: ChatUserData) => void;
-  selected?: ChatMember;
+  selected?: UserResponse;
 }
 
 const Chat: React.FC<ChatProps> = ({ selected, userData, setUserData }) => {

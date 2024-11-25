@@ -1,53 +1,61 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Box, Typography } from '@mui/material';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
-import { ChatList } from '@/components/List/ChatList';
-import { AppRoutes, ChatMember, ChatUserData } from '@/models';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/store/store';
+import { AppRoutes, ChatUserData, UserResponse } from '@/models';
 import { Link } from "react-router-dom";
 import Chat from '@/private/chat/Chat';
 import MemberList from '@/private/chat/MemberList';
+import { getUserConversationsAction } from '@/store/users';
 
 const Dashboard: React.FC = () => {
-  const user = useSelector((state: RootState) => state.user.user);
-  const [selectedChat, setSelectedChat] = useState<ChatMember | null>(null);
+  const { user, conversations } = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch<AppDispatch>();
+  const [selectedChat, setSelectedChat] = useState<UserResponse | null>(null);
   const [userData, setUserData] = useState<ChatUserData>({
-    username: user.username,
-    recievername: selectedChat?.name || "PUBLIC",
+    username: user?.username || "",
+    recievername: "PUBLIC",
     message: "",
     connected: false,
   });
 
+  const fetchConversations = () => {
+    if (user) {
+      dispatch(getUserConversationsAction(user.userId));
+    }
+  };
 
-  const [chats, setChats] = useState<ChatMember[]>([
-    { id: '0', name: 'public', lastMessage: 'I am the public message', selected: false },
-    { id: '1', name: 'cristian.c.lopez.m@hotmail.com', lastMessage: 'Hi there! I\'m using this chat', selected: false },
-    { id: '10', name: 'cristian2002', lastMessage: 'Hi there! I\'m using this chat', selected: false },
-    { id: '2', name: 'Cristian Lopez', lastMessage: 'Hi there! I\'m using this chat', selected: false },
-    { id: '3', name: 'Sergio Mora', lastMessage: 'Hi there! I\'m using this chat', selected: false },
-    { id: '4', name: 'Karen Ruiz', lastMessage: 'Hi there! I\'m using this chat', selected: false },
-  ]);
+  useEffect(() => {
+    if (user) {
+      fetchConversations();
+    }
+  }, []);
 
-  const handleChatSelect = (member: ChatMember) => {
-    const selectedChatItem = chats.find(chat => chat.id === member.id)
+  const handleChatSelect = (member: UserResponse) => {
+    const selectedChatItem = conversations.find(chat => chat.userId === member.userId);
+
     if (selectedChatItem) {
-      setUserData({ ...userData, recievername: selectedChatItem.name });
+      setUserData(prevState => ({
+        ...prevState,
+        recievername: selectedChatItem.username,
+      }));
       setSelectedChat(selectedChatItem);
+      console.info("Selected chat");
+      console.log( selectedChatItem)
     }
   };
 
   return (
     <Container maxWidth="xl">
       <Box display="flex" alignItems="center" justifyContent="space-between" minHeight="99vh">
-
         <Box minWidth="30%" minHeight="100vh">
           <MemberList
-            members={chats}
+            selected={selectedChat}
+            members={conversations}
             onChatSelect={handleChatSelect}
-            setChats={setChats}
+            setChats={fetchConversations}
           />
         </Box>
-
         <Box
           minWidth="70%"
           minHeight="100vh"
@@ -55,16 +63,16 @@ const Dashboard: React.FC = () => {
           justifyContent="center"
           alignItems="center"
         >
-          {
-            selectedChat ?
-              <Box minWidth="100%" minHeight={{ sm: '99vh' }} >
-                <Chat userData={userData} setUserData={setUserData} selected={selectedChat} />
-              </Box>
-              :
-              <Typography variant="h4" component="h1" align="center">
-                <Link to={AppRoutes.private.chat}>chat</Link>
-              </Typography>
-          }</Box>
+          {selectedChat ? (
+            <Box minWidth="100%" minHeight={{ sm: '99vh' }}>
+              <Chat userData={userData} setUserData={setUserData} selected={selectedChat} />
+            </Box>
+          ) : (
+            <Typography variant="h4" component="h1" align="center">
+              <Link to={AppRoutes.private.chat}>chat</Link>
+            </Typography>
+          )}
+        </Box>
       </Box>
     </Container>
   );

@@ -1,28 +1,30 @@
 import React from "react";
 import { Button, List, ListItemAvatar, Typography } from "@mui/material";
 import { ChatButton } from "@/components/Button";
-import { ChatMember } from "@/models";
+import { ChatMember, UserResponse } from "@/models";
 import { StringAvatar } from "@/components/avatar";
 
 type MemberListProps = {
-  members: ChatMember[];
-  onChatSelect: (member: ChatMember) => void;
-  setChats: (chats: ChatMember[]) => void;
+  members: UserResponse[];
+  selected: UserResponse | null;
+  onChatSelect: (member: UserResponse) => void;
+  setChats: (chats: UserResponse[]) => void;
 };
 
 const MemberList: React.FC<MemberListProps> = ({
   members,
+  selected,
   onChatSelect,
   setChats
 }) => {
 
-  const handleChatSelect = (member: ChatMember) => {
+  const handleChatSelect = (member: UserResponse) => {
     const updatedChats = members.map(chat => ({
       ...chat,
-      selected: chat.id === member.id,
+      selected: chat.userId === member.userId,
     }));
-    setChats(updatedChats);
     onChatSelect(member);
+    setChats(updatedChats);
   };
 
   return (
@@ -38,9 +40,10 @@ const MemberList: React.FC<MemberListProps> = ({
         </ListItemAvatar>
         PUBLIC CHAT
       </Button>
-      {members.map((member: ChatMember) => (
+      {members.map((member: UserResponse) => (
         <ChatButton
           member={member}
+          selected={member.userId === selected?.userId}
           onChatSelect={handleChatSelect}
         />
       ))}
