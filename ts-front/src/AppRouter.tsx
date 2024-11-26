@@ -1,10 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
 import { AppRoutes } from "./models";
 import Home from "@/public/Home";
-import Dashboard from "./public/Dashboard";
 import SignUp from "./public/SignUp";
 import Login from "./public/Login";
 import { Chat } from "@mui/icons-material";
+import Dashboard from "./private/dashboard/Dashboard";
 
 export const router = createBrowserRouter([
   {

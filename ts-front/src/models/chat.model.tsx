@@ -7,15 +7,15 @@ export interface ChatMember {
 }
 
 export interface ChatUserData {
-  username: string;
-  recievername: string;
+  senderId: string;
+  receiverId: string;
   message: string;
   connected: boolean;
 }
 
 export interface ChatPayload{
-  senderName: string;
-  receiverName: string;
+  senderId: string;
+  receiverId: string;
   message: string;
   status: string;
 }

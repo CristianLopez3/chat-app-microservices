@@ -1,7 +1,7 @@
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
 
-function stringAvatar(name: string) {
+const stringAvatar = (name: string) => {
   const nameParts = name.split(' ');
   const initials = nameParts.length > 1 
     ? `${nameParts[0][0]}${nameParts[1][0]}` 

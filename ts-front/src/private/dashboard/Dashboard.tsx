@@ -13,8 +13,8 @@ const Dashboard: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [selectedChat, setSelectedChat] = useState<UserResponse | null>(null);
   const [userData, setUserData] = useState<ChatUserData>({
-    username: user?.username || "",
-    recievername: "PUBLIC",
+    senderId: user?.userId || "",
+    receiverId: "PUBLIC",
     message: "",
     connected: false,
   });
@@ -37,7 +37,7 @@ const Dashboard: React.FC = () => {
     if (selectedChatItem) {
       setUserData(prevState => ({
         ...prevState,
-        recievername: selectedChatItem.username,
+        receiverId: selectedChatItem.userId,
       }));
       setSelectedChat(selectedChatItem);
       console.info("Selected chat");
