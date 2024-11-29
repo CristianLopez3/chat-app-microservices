@@ -5,14 +5,11 @@
 
 ✅ -> Hacer el user service funcional con la UI.
 
-❌ -> Pulir los mensajes de error del API gateway.
-
-❌ -> Persistir los mensajes (mongo db) 
-
 ❌ -> Como identificar si un usuario esta en linea.
 
-❌ -> 
+❌ -> Frequent Contacts -> last 10 users
 
+❌ -> Conversation Service
 
 ## T A S K ' S
 
@@ -24,4 +21,3 @@
 
 1. @Trascient
 2. @Column -> se puede hacer a nivel de getter y funciona igual.
-3. 
