@@ -5,19 +5,22 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Builder
 public record RequestMessageDto (
 
+        String id,
+
         @NotEmpty(message = "Message cannot be empty")
-        String message,
+        String content,
 
         @NotEmpty(message = "Sender id cannot be empty")
-        String senderId,
+        UUID senderId,
 
-        @NotEmpty(message = "Receiver id cannot be empty")
-        String receiverId,
+        @NotEmpty(message = "Conversation id cannot be empty")
+        String conversationId,
 
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-        LocalDateTime sendDate
+        LocalDateTime createdAt
 ){}

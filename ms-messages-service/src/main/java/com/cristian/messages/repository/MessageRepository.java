@@ -8,7 +8,6 @@ import reactor.core.publisher.Flux;
 @Repository
 public interface MessageRepository extends ReactiveMongoRepository<Message, String> {
 
-    Flux<Message> findBySenderIdOrReceiverId(String senderId, String receiverId);
-    Flux<Message> findBySenderId(String senderId);
+//    Flux<Message> findBySenderIdOrRecipientId(Long senderId, Long receiverId);
 
 }

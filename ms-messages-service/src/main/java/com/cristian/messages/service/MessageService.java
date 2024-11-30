@@ -5,8 +5,6 @@ import com.cristian.messages.model.Message;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
-
 
 public interface MessageService {
 
@@ -14,5 +12,5 @@ public interface MessageService {
 
     Flux<Message> getAll();
 
-    Mono<List<String>> getUserConversations(String userId);
+//    Mono<List<Long>> getUserConversations(Long userId);
 }

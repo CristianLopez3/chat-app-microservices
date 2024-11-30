@@ -1,6 +1,5 @@
 package com.cristian.msusersservice.service.impl;
 
-import com.cristian.msusersservice.dto.LoginRequestDto;
 import com.cristian.msusersservice.dto.UserRequestDto;
 import com.cristian.msusersservice.dto.UserResponseDto;
 import com.cristian.msusersservice.exception.UserNotFoundException;
@@ -42,6 +41,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDto create(UserRequestDto userRequest) {
+        // todo - validate username before creating
         var user = UserMapper.toUser(userRequest);
         var savedUser = userRepository.save(user);
         logger.info("User created with id: {}", savedUser.getId());
@@ -55,7 +55,6 @@ public class UserServiceImpl implements UserService {
         var user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User with id" + id + " not found"));
         user.setName(userRequestDto.name());
-        user.setLastname(userRequestDto.lastname());
         user.setUsername(userRequestDto.username());
 
         userRepository.save(user);

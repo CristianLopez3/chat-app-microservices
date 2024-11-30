@@ -37,9 +37,9 @@ public class MessageController {
         return messageService.getAll();
     }
 
-    @GetMapping("/{userId}/conversations")
-    Mono<List<String>> getUserConversations(@PathVariable String userId){
-        return messageService.getUserConversations(userId);
-    }
-
+//    @GetMapping("/{userId}/conversations")
+//    Mono<List<Long>> getUserConversations(@PathVariable Long userId){
+//        return messageService.getUserConversations(userId);
+//    }
+//
 }

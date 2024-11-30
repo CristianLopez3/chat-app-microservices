@@ -10,19 +10,19 @@ public final class MessageMapper {
 
     public static Message toMessage(RequestMessageDto requestMessageDto){
         return Message.builder()
-                .message(requestMessageDto.message())
+                .content(requestMessageDto.content())
                 .senderId(requestMessageDto.senderId())
-                .receiverId(requestMessageDto.receiverId())
-                .sendDate(requestMessageDto.sendDate())
+                .createdAt(requestMessageDto.createdAt())
+                .conversationId(requestMessageDto.conversationId())
                 .build();
     }
 
     public static RequestMessageDto toRequestMessageDto(Message message){
         return RequestMessageDto.builder()
-                .message(message.getMessage())
-                .receiverId(message.getReceiverId())
+                .content(message.getContent())
                 .senderId(message.getSenderId())
-                .sendDate(message.getSendDate())
+                .conversationId(message.getConversationId())
+                .createdAt(message.getCreatedAt())
                 .build();
     }
 

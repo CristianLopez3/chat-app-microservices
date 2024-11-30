@@ -24,7 +24,7 @@ public class MessageServiceImpl implements MessageService {
         return Mono.just(requestMessageDto)
                 .map(MessageMapper::toMessage)
                 .map(message -> {
-                    message.setSendDate(LocalDateTime.now());
+                    message.setCreatedAt(LocalDateTime.now());
                     return message;
                 })
                 .flatMap(messageRepository::save)
@@ -36,15 +36,15 @@ public class MessageServiceImpl implements MessageService {
         return messageRepository.findAll();
     }
 
-    @Override
-    public Mono<List<String>> getUserConversations(String userId) {
-        return messageRepository.findBySenderIdOrReceiverId(userId, userId)
-                .map(message ->
-                        message.getSenderId().equals(userId)
-                                ? message.getReceiverId()
-                                : message.getSenderId())
-                .distinct()
-                .collectList();
-    }
+//    @Override
+//    public Mono<List<Long>> getUserConversations(Long userId) {
+//        return messageRepository.findBySenderIdOrRecipientId(userId, userId)
+//                .map(message ->
+//                        message.getSenderId().equals(userId)
+//                                ? message.getRecipientId()
+//                                : message.getSenderId())
+//                .distinct()
+//                .collectList();
+//    }
 
 }
