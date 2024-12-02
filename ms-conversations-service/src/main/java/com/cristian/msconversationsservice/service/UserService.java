@@ -9,7 +9,7 @@ import java.util.UUID;
 @FeignClient("ms-users-service")
 public interface UserService {
 
-    @GetMapping("/users")
+    @GetMapping("/users/exists")
     boolean existsByUuid(@RequestParam("uuid") UUID uuid);
 
 }

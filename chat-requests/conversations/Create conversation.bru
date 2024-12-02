@@ -1,0 +1,22 @@
+meta {
+  name: Create conversation
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:8084/api/conversations
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "participants": [
+      "edfbaec6-ec64-4532-83e2-e62c230094fa",
+      "59f04be8-cbd8-4b89-a8e9-11bfeb9b70ad"
+    ],
+    "isGroup": false
+  }
+  
+}

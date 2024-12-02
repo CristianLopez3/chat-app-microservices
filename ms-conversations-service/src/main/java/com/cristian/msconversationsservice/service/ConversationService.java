@@ -18,12 +18,14 @@ public class ConversationService {
 
     public Conversation createConversation(CreateConversationRequestDto request) {
 
-        List<UUID> validParticipants = request.participants().stream()
+        List<UUID> validParticipants = request.participants()
+                .stream()
+                .map(UUID::fromString)
                 .filter(userService::existsByUuid)
                 .toList();
 
         if (validParticipants.size() != request.participants().size()) {
-            throw new IllegalArgumentException("Uno o más participantes no existen");
+            throw new IllegalArgumentException("One or more participants does not exist");
         }
 
         Conversation conversation = Conversation.builder()

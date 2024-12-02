@@ -1,0 +1,15 @@
+meta {
+  name: exists by uuid
+  type: http
+  seq: 5
+}
+
+get {
+  url: http://localhost:8083/users/exists?uuid=edfbaec6-ec64-4532-83e2-e62c230094fa
+  body: none
+  auth: none
+}
+
+params:query {
+  uuid: edfbaec6-ec64-4532-83e2-e62c230094fa
+}

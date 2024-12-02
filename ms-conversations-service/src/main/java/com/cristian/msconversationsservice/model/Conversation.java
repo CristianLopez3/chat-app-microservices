@@ -48,5 +48,6 @@ public class Conversation {
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();
+        lastMessageAt = null;
     }
 }
