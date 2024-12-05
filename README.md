@@ -9,7 +9,16 @@
 
 ❌ -> Frequent Contacts -> last 10 users
 
-❌ -> Conversation Service
+✅ -> Hacer el user service funcional con la UI.
+
+✅ -> Conversation Service
+
+❌ -> En el caso de las conversaciones y mensajes, es mejor manejar entidades separadas 
+para mensajes/conversaciones directas y mensajes/conversaciones grupales?
+    * Ya que pueden haber diferencias como el nombre del chat, el tipo de chat, el como se envian los 
+        mensajes, asi como posible escalabilidad para los grupos, como el asignar roles o colocar reglas.
+    
+
 
 ## T A S K ' S
 

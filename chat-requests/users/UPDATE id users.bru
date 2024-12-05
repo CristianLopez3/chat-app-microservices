@@ -1,0 +1,20 @@
+meta {
+  name: UPDATE id users
+  type: http
+  seq: 6
+}
+
+put {
+  url: http://localhost:8083/users/1
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "daniel",
+    "lastname": "Lopez",
+    "username": "juan101",
+    "password": "password"
+  }
+}

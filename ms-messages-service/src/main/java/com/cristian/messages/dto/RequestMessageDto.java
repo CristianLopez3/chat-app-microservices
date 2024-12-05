@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
+
 
 @Builder
 public record RequestMessageDto (
@@ -16,7 +16,7 @@ public record RequestMessageDto (
         String content,
 
         @NotEmpty(message = "Sender id cannot be empty")
-        UUID senderId,
+        String senderId,
 
         @NotEmpty(message = "Conversation id cannot be empty")
         String conversationId,

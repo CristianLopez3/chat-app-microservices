@@ -21,6 +21,13 @@ public class ConversationServiceImpl implements ConversationService {
 
     @Override
     public Conversation createConversation(CreateConversationRequestDto request) {
+        int participantCount = request.participants().size();
+
+        if (request.isGroup() && participantCount < 2) {
+            throw new IllegalArgumentException("Group conversation must have at least 2 participants");
+        } else if (!request.isGroup() && participantCount != 2) {
+            throw new IllegalArgumentException("Private conversation must have exactly 2 participants");
+        }
 
         List<UUID> validParticipants = request.participants()
                 .stream()
@@ -28,7 +35,7 @@ public class ConversationServiceImpl implements ConversationService {
                 .filter(userService::existsByUuid)
                 .toList();
 
-        if (validParticipants.size() != request.participants().size()) {
+        if (validParticipants.size() != participantCount) {
             throw new ResourceNotFoundException("One or more participants does not exist");
         }
 
@@ -46,6 +53,16 @@ public class ConversationServiceImpl implements ConversationService {
         Conversation conversation = conversationRepository.findById(conversationId)
                 .orElseThrow(() -> new ResourceNotFoundException("Conversation not found"));
         conversationRepository.delete(conversation);
+    }
+
+    @Override
+    public List<Conversation> getConversationsByUserUUID(String userUUID) {
+        return List.of();
+    }
+
+    @Override
+    public List<Conversation> getConversations() {
+        return conversationRepository.findAll();
     }
 
 
