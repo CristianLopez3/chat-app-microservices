@@ -3,33 +3,16 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.0</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<groupId>com.cristian</groupId>
+		<artifactId>chat-bom</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../chat-bom/pom.xml</relativePath> <!-- THIS RELATIVE PATH IS NECESSARY FOR CI/CD -->
 	</parent>
-	<groupId>com.cristian</groupId>
 	<artifactId>ms-conversations-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ms-conversations-service</name>
 	<description>ms-conversations-service</description>
-	<url/>
-	<licenses>
-		<license/>
-	</licenses>
-	<developers>
-		<developer/>
-	</developers>
-	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
-	</scm>
-	<properties>
-		<java.version>17</java.version>
-		<spring-cloud.version>2024.0.0-RC1</spring-cloud.version>
-	</properties>
+
 	<dependencies>
 
 		<dependency>
@@ -57,6 +40,7 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
+			<version>${lombok.version}</version>
 		</dependency>
 
 		<dependency>
@@ -69,6 +53,7 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-openfeign</artifactId>
 		</dependency>
+
         <dependency>
             <groupId>com.cristian</groupId>
             <artifactId>ms-users-service</artifactId>
@@ -77,18 +62,6 @@
         </dependency>
 
     </dependencies>
-
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>${spring-cloud.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
 
 	<build>
 		<plugins>
@@ -102,6 +75,16 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>${jib.version}</version>
+				<configuration>
+					<to>
+						<image>cristian/${project.artifactId}:${image.tags}</image>
+					</to>
 				</configuration>
 			</plugin>
 		</plugins>

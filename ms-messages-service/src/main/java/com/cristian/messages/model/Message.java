@@ -3,6 +3,7 @@ package com.cristian.messages.model;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.netty.channel.local.LocalAddress;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
