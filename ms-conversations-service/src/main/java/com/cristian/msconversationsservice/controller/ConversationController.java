@@ -1,6 +1,7 @@
 package com.cristian.msconversationsservice.controller;
 
-import com.cristian.msconversationsservice.dto.CreateConversationRequestDto;
+import com.cristian.msconversationsservice.dto.ConversationDTO;
+import com.cristian.msconversationsservice.dto.CreateConversationDto;
 import com.cristian.msconversationsservice.model.Conversation;
 import com.cristian.msconversationsservice.service.ConversationService;
 import lombok.AllArgsConstructor;
@@ -22,8 +23,8 @@ public class ConversationController {
     private final ConversationService conversationService;
 
     @PostMapping
-    public ResponseEntity<Conversation> createConversation(@RequestBody CreateConversationRequestDto request) {
-        Conversation conversation = conversationService.createConversation(request);
+    public ResponseEntity<ConversationDTO> createConversation(@RequestBody CreateConversationDto request) {
+        var conversation = conversationService.createConversation(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(conversation);
     }
 

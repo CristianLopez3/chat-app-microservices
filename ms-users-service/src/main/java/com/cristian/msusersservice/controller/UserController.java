@@ -2,7 +2,6 @@ package com.cristian.msusersservice.controller;
 
 import com.cristian.msusersservice.dto.UserRequestDto;
 import com.cristian.msusersservice.dto.UserResponseDto;
-import com.cristian.msusersservice.service.ConversationService;
 import com.cristian.msusersservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -26,7 +25,6 @@ import java.util.UUID;
 public class UserController {
 
     private final UserService userService;
-    private final ConversationService conversationService;
     private static final  Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @GetMapping
@@ -50,17 +48,9 @@ public class UserController {
         return ResponseEntity.ok(userService.get(id));
     }
 
-    @GetMapping("{id}/conversations")
-    public ResponseEntity<List<UserResponseDto>> getUserConversations(@PathVariable Long id){
-        logger.debug("Getting conversations for user with id: {}", id);
-        return ResponseEntity.ok(conversationService.getUserConversations(id));
-    }
-
-
     @GetMapping("/exists")
     public ResponseEntity<Boolean> existsByUuid(@RequestParam("uuid") String uuid){
         return ResponseEntity.ok(userService.existsByUuid(UUID.fromString(uuid)));
     }
-
 
 }

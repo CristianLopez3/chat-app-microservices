@@ -1,58 +1,59 @@
 package com.cristian.msconversationsservice.service.impl;
 
-import com.cristian.msconversationsservice.dto.CreateConversationRequestDto;
+import com.cristian.msconversationsservice.dto.ConversationDTO;
+import com.cristian.msconversationsservice.dto.CreateConversationDto;
 import com.cristian.msconversationsservice.exception.ResourceNotFoundException;
 import com.cristian.msconversationsservice.model.Conversation;
+import com.cristian.msconversationsservice.model.Participant;
 import com.cristian.msconversationsservice.repository.ConversationRepository;
 import com.cristian.msconversationsservice.service.ConversationService;
 import com.cristian.msconversationsservice.service.UserService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.jboss.logging.Logger;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class ConversationServiceImpl implements ConversationService {
+public class ConversationServiceImpl  implements ConversationService {
 
+    private final Logger logger = Logger.getLogger(ConversationServiceImpl.class);
     private final ConversationRepository conversationRepository;
     private final UserService userService;
+    private final ConversationValidator conversationValidator;
 
     @Override
-    public Conversation createConversation(CreateConversationRequestDto request) {
-        int participantCount = request.participants().size();
+    @Transactional
+    public ConversationDTO createConversation(CreateConversationDto dto) {
+        logger.debug("Creating conversation with data: " + dto);
+        conversationValidator.validate(dto);
 
-        if (request.isGroup() && participantCount < 2) {
-            throw new IllegalArgumentException("Group conversation must have at least 2 participants");
-        } else if (!request.isGroup() && participantCount != 2) {
-            throw new IllegalArgumentException("Private conversation must have exactly 2 participants");
-        }
+        Conversation conversation = dto.toConversation();
 
-        List<UUID> validParticipants = request.participants()
+        List<Participant> participants = dto.participants()
                 .stream()
-                .map(UUID::fromString)
-                .filter(userService::existsByUuid)
-                .toList();
+                .map(participantUUID -> {
+                    if (!userService.existsByUuid(participantUUID)) {
+                        throw new ResourceNotFoundException("User with UUID " + participantUUID + " not found");
+                    }
+                    return Participant.builder()
+                            .participantId(participantUUID)
+                            .conversation(conversation)
+                            .build();
+                }).toList();
 
-        if (validParticipants.size() != participantCount) {
-            throw new ResourceNotFoundException("One or more participants does not exist");
-        }
-
-        Conversation conversation = Conversation.builder()
-                .participants(validParticipants)
-                .isGroup(request.isGroup())
-                .lastMessageAt(null)
-                .build();
-
-        return conversationRepository.save(conversation);
+        conversation.setParticipants(participants);
+        Conversation savedConversation = conversationRepository.save(conversation);
+        return ConversationDTO.fromConversation(savedConversation);
     }
+
+
+
 
     @Override
     public void deleteConversation(Long conversationId) {
-        Conversation conversation = conversationRepository.findById(conversationId)
-                .orElseThrow(() -> new ResourceNotFoundException("Conversation not found"));
-        conversationRepository.delete(conversation);
     }
 
     @Override
@@ -62,7 +63,7 @@ public class ConversationServiceImpl implements ConversationService {
 
     @Override
     public List<Conversation> getConversations() {
-        return conversationRepository.findAll();
+        return List.of();
     }
 
 
