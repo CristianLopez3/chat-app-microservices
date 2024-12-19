@@ -1,5 +1,6 @@
 package com.cristian.msconversationsservice.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,6 +38,7 @@ public class Conversation {
 
     @OneToMany(mappedBy = "conversation", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @Size(min = 2, message = "A conversation must have at least two participants")
+    @JsonManagedReference
     private List<Participant> participants = new ArrayList<>();
 
     private boolean isGroup;

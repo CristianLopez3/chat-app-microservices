@@ -1,6 +1,8 @@
 package com.cristian.msconversationsservice.service;
 
 import com.cristian.msconversationsservice.dto.ConversationDTO;
+import com.cristian.msconversationsservice.dto.ConversationProjection;
+import com.cristian.msconversationsservice.dto.ConversationResponseDTO;
 import com.cristian.msconversationsservice.dto.CreateConversationDto;
 import com.cristian.msconversationsservice.model.Conversation;
 
@@ -13,7 +15,7 @@ public interface ConversationService {
 
     void deleteConversation(Long conversationId);
 
-    List<Conversation> getConversationsByUserUUID(String userUUID);
+    List<ConversationResponseDTO> getConversationsByUserUUID(String userUUID);
 
     List<Conversation> getConversations();
 

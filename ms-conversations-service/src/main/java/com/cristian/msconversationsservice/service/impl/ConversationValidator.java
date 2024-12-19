@@ -1,10 +1,20 @@
 package com.cristian.msconversationsservice.service.impl;
 
 import com.cristian.msconversationsservice.dto.CreateConversationDto;
+import com.cristian.msconversationsservice.repository.ConversationRepository;
 import org.springframework.stereotype.Component;
+
+import java.util.UUID;
+import java.util.List;
 
 @Component
 public class ConversationValidator {
+
+    private final ConversationRepository conversationRepository;
+
+    public ConversationValidator(ConversationRepository conversationRepository) {
+        this.conversationRepository = conversationRepository;
+    }
 
     public void validate(CreateConversationDto dto) {
         if (dto.isGroupConversation()) {
@@ -29,6 +39,21 @@ public class ConversationValidator {
         }
         if (dto.groupName() != null || dto.groupDescription() != null) {
             throw new IllegalArgumentException("Individual conversations should not have group metadata.");
+        }
+
+        // Validate uniqueness of the conversation
+        validateNoExistingDirectConversation(dto.participants());
+    }
+
+    private void validateNoExistingDirectConversation(List<UUID> participants) {
+        UUID participant1 = participants.get(0);
+        UUID participant2 = participants.get(1);
+
+        boolean exists = conversationRepository.existsDirectConversation(participant1, participant2);
+        if (exists) {
+            throw new IllegalArgumentException(
+                    "An individual conversation between these participants already exists."
+            );
         }
     }
 }

@@ -5,18 +5,16 @@
 
 ✅ -> Hacer el user service funcional con la UI.
 
-❌ -> Como identificar si un usuario esta en linea.
+❌ -> Como identificar si un usuario esta en linea - status.
 
 ❌ -> Frequent Contacts -> last 10 users
 
-✅ -> Hacer el user service funcional con la UI.
+❌ -> Save a conversation cause a problem because of the cascade, what is the best approach?.
 
-✅ -> Conversation Service
+Strategy pattern for validations.
 
-❌ -> En el caso de las conversaciones y mensajes, es mejor manejar entidades separadas 
-para mensajes/conversaciones directas y mensajes/conversaciones grupales?
-    * Ya que pueden haber diferencias como el nombre del chat, el tipo de chat, el como se envian los 
-        mensajes, asi como posible escalabilidad para los grupos, como el asignar roles o colocar reglas.
+select * from conversations c inner join tb_group_metadata t on t.id = c.group_metadata_id;
+
     
 
 

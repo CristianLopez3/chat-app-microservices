@@ -32,6 +32,20 @@ public class GlobalExceptionHandler {
                 .body(errorResponse);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> illegalArgumentException(Exception e, HttpServletRequest request) {
+        getError(e, request);
+        var errorResponse = ErrorResponse.builder()
+                .message(e.getMessage())
+                .path(request.getRequestURI())
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .localDateTime(LocalDateTime.now()).build();
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(errorResponse);
+    }
+
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> exception(Exception e, HttpServletRequest request) {
