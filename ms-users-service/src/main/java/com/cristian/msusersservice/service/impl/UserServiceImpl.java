@@ -25,10 +25,11 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public UserResponseDto get(Long id) {
-        User user = userRepository.findById(id)
+    public UserResponseDto getByUUID(String uuid) {
+        var validUUID = UUID.fromString(uuid);
+        User user = userRepository.findByUuid(validUUID)
                 .orElseThrow(
-                        () -> new UserNotFoundException(String.format("User with id: %s, does not exists", id))
+                        () -> new UserNotFoundException(String.format("User with uuid: %s, does not exists", validUUID))
                 );
         return UserMapper.toUserResponseDto(user);
     }

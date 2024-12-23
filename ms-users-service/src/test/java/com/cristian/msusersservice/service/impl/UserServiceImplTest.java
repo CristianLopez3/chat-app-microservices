@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -49,11 +50,11 @@ class UserServiceImplTest {
 
     @Test
     void get() {
-        given(userRepository.findById(anyLong())).willReturn(Optional.of(mockUser));
-        UserResponseDto result = userServiceImpl.get(1L);
+        given(userRepository.findByUuid(any(UUID.class))).willReturn(Optional.of(mockUser));
+        UserResponseDto result = userServiceImpl.getByUUID(UUID.randomUUID().toString());
 
         assertNotNull(result);
-        then(userRepository).should().findById(anyLong());
+        then(userRepository).should().findByUuid(any(UUID.class));
     }
 
     @Test

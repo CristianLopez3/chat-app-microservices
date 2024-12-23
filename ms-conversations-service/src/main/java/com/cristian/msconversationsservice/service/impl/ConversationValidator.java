@@ -1,6 +1,6 @@
 package com.cristian.msconversationsservice.service.impl;
 
-import com.cristian.msconversationsservice.dto.CreateConversationDto;
+import com.cristian.msconversationsservice.dto.CreateConversationDTO;
 import com.cristian.msconversationsservice.repository.ConversationRepository;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +16,7 @@ public class ConversationValidator {
         this.conversationRepository = conversationRepository;
     }
 
-    public void validate(CreateConversationDto dto) {
+    public void validate(CreateConversationDTO dto) {
         if (dto.isGroupConversation()) {
             validateGroupConversation(dto);
         } else {
@@ -24,7 +24,7 @@ public class ConversationValidator {
         }
     }
 
-    private void validateGroupConversation(CreateConversationDto dto) {
+    private void validateGroupConversation(CreateConversationDTO dto) {
         if (dto.participants().size() < 2) {
             throw new IllegalArgumentException("A group conversation must have at least two participants.");
         }
@@ -33,7 +33,7 @@ public class ConversationValidator {
         }
     }
 
-    private void validateDirectConversation(CreateConversationDto dto) {
+    private void validateDirectConversation(CreateConversationDTO dto) {
         if (dto.participants().size() != 2) {
             throw new IllegalArgumentException("An individual conversation must have just two participants.");
         }

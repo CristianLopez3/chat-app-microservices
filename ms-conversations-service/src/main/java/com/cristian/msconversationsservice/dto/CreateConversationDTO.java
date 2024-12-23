@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size;
 import java.util.List;
 import java.util.UUID;
 
-public record CreateConversationDto(
+public record CreateConversationDTO(
         @NotNull(message = "The isGroup field is required")
         Boolean isGroup,
 

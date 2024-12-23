@@ -12,5 +12,5 @@ public interface MessageService {
 
     Flux<Message> getAll();
 
-//    Mono<List<Long>> getUserConversations(Long userId);
+    Flux<Message> getMessagesByConversationId(String conversationId);
 }

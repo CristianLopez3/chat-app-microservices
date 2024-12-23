@@ -1,23 +1,26 @@
 package com.cristian.messages.service.impl;
 
 import com.cristian.messages.dto.RequestMessageDto;
+import com.cristian.messages.exception.ResourceNotFoundException;
 import com.cristian.messages.mapper.MessageMapper;
 import com.cristian.messages.model.Message;
 import com.cristian.messages.repository.MessageRepository;
 import com.cristian.messages.service.MessageService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class MessageServiceImpl implements MessageService {
 
     private final MessageRepository messageRepository;
+    private final Logger logger = LoggerFactory.getLogger(MessageServiceImpl.class);
 
     @Override
     public Mono<RequestMessageDto> saveMessage(RequestMessageDto requestMessageDto) {
@@ -36,15 +39,16 @@ public class MessageServiceImpl implements MessageService {
         return messageRepository.findAll();
     }
 
-//    @Override
-//    public Mono<List<Long>> getUserConversations(Long userId) {
-//        return messageRepository.findBySenderIdOrRecipientId(userId, userId)
-//                .map(message ->
-//                        message.getSenderId().equals(userId)
-//                                ? message.getRecipientId()
-//                                : message.getSenderId())
-//                .distinct()
-//                .collectList();
-//    }
+    @Override
+    public Flux<Message> getMessagesByConversationId(String conversationId) {
+        return messageRepository.findByConversationId(conversationId)
+                .switchIfEmpty(Mono.error(new ResourceNotFoundException("No messages found for conversation with id: " + conversationId)))
+                .onErrorResume(e -> {
+                    logger.error("Error fetching messages for conversationId: {}", conversationId, e);
+                    return Mono.error(e);
+                });
+    }
+
+
 
 }

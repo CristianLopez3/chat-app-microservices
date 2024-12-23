@@ -10,7 +10,7 @@ public interface UserService {
 
     UserResponseDto create(UserRequestDto userRequest);
 
-    UserResponseDto get(Long id);
+    UserResponseDto getByUUID(String id);
 
     List<UserResponseDto> getAll();
 

@@ -1,0 +1,21 @@
+meta {
+  name: Create conversation gt
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:8089/chat/conversations
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "participants": [
+      "edfbaec6-ec64-4532-83e2-e62c230094fa",
+      "b43587ed-db9e-477e-af62-324395466c3a"
+    ],
+    "isGroup": false
+  }
+}

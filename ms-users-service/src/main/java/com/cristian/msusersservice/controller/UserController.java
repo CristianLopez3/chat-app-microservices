@@ -43,10 +43,10 @@ public class UserController {
                 .body(userResponse);
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<UserResponseDto> getUser(@PathVariable("id") Long id){
-        logger.debug("Getting user with id: {}", id);
-        return ResponseEntity.ok(userService.get(id));
+    @GetMapping("{uuid}")
+    public ResponseEntity<UserResponseDto> getUser(@PathVariable("uuid") String uuid){
+        logger.debug("Getting user with id: {}", uuid);
+        return ResponseEntity.ok(userService.getByUUID(uuid));
     }
 
     @GetMapping("/exists")

@@ -1,5 +1,8 @@
 package com.cristian.messages.exception;
 
+import feign.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -10,7 +13,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.web.server.ServerWebExchange;
-import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
@@ -19,22 +21,54 @@ import java.util.stream.Collectors;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex, ServerWebExchange exchange) {
-        String errorMessage = ex.getBindingResult().getAllErrors().stream()
-                .map(error -> ((FieldError) error).getField() + ": " + error.getDefaultMessage())
-                .collect(Collectors.joining(", "));
+    private final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-        ErrorResponse errorResponse = ErrorResponse.builder()
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> resourceNotFoundException(ResourceNotFoundException ex, ServerWebExchange exchange) {
+        logger.warn("Resource not found: {}", ex.getMessage());
+        var errorResponse = ErrorResponse.builder()
                 .path(exchange.getRequest().getPath().value())
                 .status(HttpStatus.BAD_REQUEST.value())
-                .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
-                .message(errorMessage)
-                .timestamp(LocalDateTime.now())
+                .message(ex.getMessage())
+                .localDateTime(LocalDateTime.now())
                 .build();
 
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(errorResponse);
     }
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> validationExceptions(MethodArgumentNotValidException ex, ServerWebExchange exchange) {
+        var errorMessage = ex.getBindingResult().getAllErrors().stream()
+                .map(error -> ((FieldError) error).getField() + ": " + error.getDefaultMessage())
+                .collect(Collectors.joining(", "));
+        logger.warn("Validation error: {}", errorMessage);
+        var errorResponse = ErrorResponse.builder()
+                .path(exchange.getRequest().getPath().value())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .message(errorMessage)
+                .localDateTime(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(errorResponse);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> exception(Exception ex, ServerWebExchange exchange) {
+        logger.warn("Exception: {}", ex.getMessage());
+        var errorResponse = ErrorResponse.builder()
+                .path(exchange.getRequest().getPath().value())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .message(ex.getMessage())
+                .localDateTime(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(errorResponse);
+    }
 
 }

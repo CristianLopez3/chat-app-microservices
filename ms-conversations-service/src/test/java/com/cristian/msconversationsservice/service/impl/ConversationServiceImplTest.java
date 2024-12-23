@@ -2,8 +2,10 @@ package com.cristian.msconversationsservice.service.impl;
 
 import com.cristian.msconversationsservice.dto.ConversationProjection;
 import com.cristian.msconversationsservice.dto.ConversationResponseDTO;
+import com.cristian.msconversationsservice.dto.UserDTO;
 import com.cristian.msconversationsservice.repository.ConversationRepository;
 import com.cristian.msconversationsservice.repository.ParticipantsRepository;
+import com.cristian.msconversationsservice.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,6 +20,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,6 +32,9 @@ class ConversationServiceImplTest {
     @Mock
     private ParticipantsRepository participantsRepository;
 
+    @Mock
+    private UserService userService;
+
     @InjectMocks
     private ConversationServiceImpl conversationService;
 
@@ -39,7 +45,7 @@ class ConversationServiceImplTest {
     @BeforeEach
     void setUp() {
         userUUID = UUID.randomUUID();
-        participants = List.of(UUID.randomUUID(), UUID.randomUUID());
+        participants = List.of(UUID.randomUUID());
 
         conversationProjection = new ConversationProjection() {
             @Override
@@ -82,6 +88,8 @@ class ConversationServiceImplTest {
                 .thenReturn(List.of(conversationProjection));
         when(participantsRepository.findParticipantsByConversationId(any(Long.class)))
                 .thenReturn(participants);
+        when(userService.getUserByUUID(anyString()))
+                .thenReturn(UserDTO.builder().name("John Doe").build());
 
         List<ConversationResponseDTO> result = conversationService.getConversationsByUserUUID(userUUID.toString());
 
@@ -91,6 +99,6 @@ class ConversationServiceImplTest {
         assertTrue(responseDTO.isGroup());
         assertEquals("Group Name", responseDTO.groupMetadata().name());
         assertEquals("Group Description", responseDTO.groupMetadata().description());
-        assertEquals(participants, responseDTO.participants());
+        assertEquals(participants.size(), responseDTO.participants().size());
     }
 }

@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/messages")
 @RequiredArgsConstructor
@@ -37,9 +35,9 @@ public class MessageController {
         return messageService.getAll();
     }
 
-//    @GetMapping("/{userId}/conversations")
-//    Mono<List<Long>> getUserConversations(@PathVariable Long userId){
-//        return messageService.getUserConversations(userId);
-//    }
-//
+    @GetMapping("/{conversationId}")
+    Flux<Message> getMessagesByConversationId(@PathVariable String conversationId){
+        return messageService.getMessagesByConversationId(conversationId);
+    }
+
 }

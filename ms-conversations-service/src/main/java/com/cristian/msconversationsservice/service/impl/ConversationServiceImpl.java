@@ -1,9 +1,8 @@
 package com.cristian.msconversationsservice.service.impl;
 
 import com.cristian.msconversationsservice.dto.ConversationDTO;
-import com.cristian.msconversationsservice.dto.ConversationProjection;
 import com.cristian.msconversationsservice.dto.ConversationResponseDTO;
-import com.cristian.msconversationsservice.dto.CreateConversationDto;
+import com.cristian.msconversationsservice.dto.CreateConversationDTO;
 import com.cristian.msconversationsservice.dto.GroupMetadataResponseDTO;
 import com.cristian.msconversationsservice.exception.ResourceNotFoundException;
 import com.cristian.msconversationsservice.model.Conversation;
@@ -32,7 +31,7 @@ public class ConversationServiceImpl implements ConversationService {
 
     @Override
     @Transactional
-    public ConversationDTO createConversation(CreateConversationDto dto) {
+    public ConversationDTO createConversation(CreateConversationDTO dto) {
         logger.debug("Creating conversation with data: " + dto);
         conversationValidator.validate(dto);
 
@@ -64,6 +63,7 @@ public class ConversationServiceImpl implements ConversationService {
     public List<ConversationResponseDTO> getConversationsByUserUUID(String userUUID) {
         var uuid = UUID.fromString(userUUID);
         var conversations = conversationRepository.findConversationsByUserUuid(uuid);
+
         return conversations.stream()
                 .map(projection -> {
                             var groupMetadata = projection.getIsGroup()
@@ -72,10 +72,15 @@ public class ConversationServiceImpl implements ConversationService {
                                     .description(projection.getGroupMetadata().getDescription())
                                     .build()
                                     : null;
+                            var participants = participantsRepository.findParticipantsByConversationId(projection.getId())
+                                    .stream()
+                                    .map( participant -> userService.getUserByUUID(participant.toString()))
+                                    .toList();
+
                             return ConversationResponseDTO.builder()
                                     .id(projection.getId())
                                     .groupMetadata(groupMetadata)
-                                    .participants(participantsRepository.findParticipantsByConversationId(projection.getId()))
+                                    .participants(participants)
                                     .isGroup(projection.getIsGroup())
                                     .build();
                         }

@@ -1,0 +1,15 @@
+meta {
+  name: user conversations
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:8089/chat/conversations?user=edfbaec6-ec64-4532-83e2-e62c230094fa
+  body: none
+  auth: none
+}
+
+params:query {
+  user: edfbaec6-ec64-4532-83e2-e62c230094fa
+}
