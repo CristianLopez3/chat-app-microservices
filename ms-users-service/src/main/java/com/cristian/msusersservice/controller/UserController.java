@@ -3,6 +3,7 @@ package com.cristian.msusersservice.controller;
 import com.cristian.msusersservice.dto.UserRequestDto;
 import com.cristian.msusersservice.dto.UserResponseDto;
 import com.cristian.msusersservice.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +35,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserResponseDto> createUser(@RequestBody UserRequestDto userRequestDto){
+    public ResponseEntity<UserResponseDto> createUser(@RequestBody @Valid UserRequestDto userRequestDto){
         logger.debug("Creating user with data: {}", userRequestDto);
         var userResponse = userService.create(userRequestDto);
         return ResponseEntity
@@ -43,7 +44,7 @@ public class UserController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<UserResponseDto> getUser(@PathVariable Long id){
+    public ResponseEntity<UserResponseDto> getUser(@PathVariable("id") Long id){
         logger.debug("Getting user with id: {}", id);
         return ResponseEntity.ok(userService.get(id));
     }

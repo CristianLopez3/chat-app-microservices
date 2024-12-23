@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -21,7 +22,11 @@ import java.util.UUID;
 @Setter
 @Builder
 @Entity
-@Table(name = "users")
+@Table(name = "users", indexes = {
+        @Index(name = "idx_username", columnList = "username", unique = true),
+        @Index(name = "idx_uuid", columnList = "uuid", unique = true),
+        @Index(name = "idx_active", columnList = "active")
+})
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {

@@ -2,6 +2,7 @@ package com.cristian.msusersservice.service.impl;
 
 import com.cristian.msusersservice.dto.UserRequestDto;
 import com.cristian.msusersservice.dto.UserResponseDto;
+import com.cristian.msusersservice.exception.ResourceDuplicateException;
 import com.cristian.msusersservice.exception.UserNotFoundException;
 import com.cristian.msusersservice.mapper.UserMapper;
 import com.cristian.msusersservice.model.User;
@@ -43,6 +44,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto create(UserRequestDto userRequest) {
         // todo - validate username before creating
+        userRepository.findByUsername(userRequest.username())
+                .ifPresent(user -> {
+                    throw new ResourceDuplicateException("User with username: " + userRequest.username() + " already exists");
+                });
         var user = UserMapper.toUser(userRequest);
         var savedUser = userRepository.save(user);
         logger.info("User created with id: {}", savedUser.getId());

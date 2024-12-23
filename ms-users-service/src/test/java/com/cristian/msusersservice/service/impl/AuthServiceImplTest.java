@@ -35,7 +35,6 @@ class AuthServiceImplTest {
         mockUser = User.builder()
                 .id(1L)
                 .name("John")
-                .lastname("Doe")
                 .username("john.doe@example.com")
                 .password("example")
                 .build();
