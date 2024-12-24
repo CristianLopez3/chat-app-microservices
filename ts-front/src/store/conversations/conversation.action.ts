@@ -1,7 +1,9 @@
-// src/store/userActions.ts
+// src/store/messageAction.ts
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { createConversation, getUserConversationsById } from '@/services';
-import { Conversation, ConversationDTO } from '@/models';
+import { ChatPayload, Conversation, ConversationDTO } from '@/models';
+import { MessageResponse } from '@/models/message.model';
+import { getMessagesByConversationId } from '@/services/message.service';
 
 export const createConversationAction = createAsyncThunk<Conversation, ConversationDTO>(
   'conversation/createConversation',
@@ -43,3 +45,27 @@ export const selectChatAction = createAsyncThunk<Conversation, Conversation>(
     return conversation;
   }
 )
+
+export const getConversationMessagesAction = createAsyncThunk<MessageResponse[], string>(
+  "conversation/getConversationMessages",
+  async (id, {rejectWithValue}) => {
+    try {
+      const { call } = getMessagesByConversationId(id);
+      const response = await call;
+      return response.data;
+    } catch (error: any) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+)
+
+
+export const addMessageAction = createAsyncThunk<ChatPayload, ChatPayload>(
+  'messages/addMessage',
+  async (message: ChatPayload) => {
+    return message;
+  }
+);

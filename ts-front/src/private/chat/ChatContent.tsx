@@ -3,28 +3,32 @@ import SendMessage from "./SendMessage";
 import { Box, List, ListItem, ListItemText } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import { ChatUserData, ChatPayload } from "@/models";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
 
 type ChatContentProps = {
-  messages: Record<string, ChatPayload[]>;
+  // messages: Record<string, ChatPayload[]>;
   message: ChatUserData;
   handleMessageInput: (event: React.ChangeEvent<HTMLInputElement>) => void;
   sendMessage: () => void;
 };
 
 const ChatContent: React.FC<ChatContentProps> = ({
-  messages,
+  // messages,
   message,
   handleMessageInput,
   sendMessage,
 }) => {
-  const conversationMessages = messages[message.conversationId] || [];
+  // const conversationMessages = messages[message.conversationId] || [];
+  const { messages } = useSelector((state: RootState) => state.conversations);
+
 
   return (
     <Box sx={{ minWidth: "100%", height: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Grid container direction="column" sx={{ flex: 1, overflow: 'hidden' }}>
         <Grid sx={{ flex: 1, overflowY: 'scroll', background: "gray", border: "1px solid #000" }} className="chat-scrollbar">
           <List sx={{ height: "95%" }}>
-            {conversationMessages.map((chat, index) => (
+            {messages.map((chat, index) => (
               <ListItem
                 sx={{
                   display: 'flex',

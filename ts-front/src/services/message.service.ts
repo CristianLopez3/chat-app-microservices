@@ -1,11 +1,13 @@
-import { UseApiCall, User, UserLogin, UserResponse } from "@/models";
+import { UseApiCall } from "@/models";
+import { MessageResponse } from "@/models/message.model";
 import { axiosInstance } from '@/services';
 import { loadAbort } from "@/utilities";
 
-export const login = (credentials: UserLogin): UseApiCall<UserResponse> => {
+export const getMessagesByConversationId = (id: string): UseApiCall<MessageResponse[]> => {
   const controller = loadAbort();
+  console.log("Calling get messages by conversation id");
   return {
-    call: axiosInstance.post<UserResponse>('users/auth/login', credentials, {
+    call: axiosInstance.get<MessageResponse[]>(`messages/${id}`, {
       signal: controller.signal,
     }),
     controller,

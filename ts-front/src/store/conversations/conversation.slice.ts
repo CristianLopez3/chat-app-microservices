@@ -1,14 +1,15 @@
 // src/store/userSlice.ts
 import { createSlice } from '@reduxjs/toolkit';
-import { ChatPayload, Conversation, UserResponse } from '@/models';
-import { createConversationAction, getUserConversationsAction, selectChatAction } from './conversation.action';
+import { Conversation, UserResponse } from '@/models';
+import { addMessageAction, createConversationAction, getConversationMessagesAction, getUserConversationsAction, selectChatAction } from './conversation.action';
+import { MessageResponse } from '@/models/message.model';
 
 interface ConversationState {
   isLoading: boolean;
   user: UserResponse | null;
   conversations: Conversation[];
   selectedConversation: Conversation | null;
-  messages: ChatPayload[];
+  messages: MessageResponse[];
   error: {
     message: string;
     status: number;
@@ -70,6 +71,30 @@ const conversationSlice = createSlice({
       .addCase(selectChatAction.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as { message: "Fail trying to select the chat"; status: 400; };
+      })
+
+      /** GET CONVERSATION MESSAGES */
+      .addCase(getConversationMessagesAction.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getConversationMessagesAction.fulfilled, (state, action) => {
+        console.table(action.payload);
+        state.isLoading = false;
+        state.messages = action.payload;
+      })
+      .addCase(getConversationMessagesAction.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as { message: "Fail trying to get messages for conversation"; status: 400; };
+      })
+
+      /** ADD MESSAGE */
+      .addCase(addMessageAction.fulfilled, (state, action) => {
+        state.messages.push({
+          content: action.payload.content,
+          senderId: action.payload.senderId,
+          conversationId: action.payload.conversationId.toString(),
+          createdAt: new Date()
+        })
       })
 
       ;

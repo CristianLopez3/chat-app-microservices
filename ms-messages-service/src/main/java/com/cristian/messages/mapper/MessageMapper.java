@@ -21,6 +21,7 @@ public final class MessageMapper {
 
     public static RequestMessageDto toRequestMessageDto(Message message){
         return RequestMessageDto.builder()
+                .id(message.getId())
                 .content(message.getContent())
                 .senderId(message.getSenderId().toString()) // UUID to String
                 .conversationId(message.getConversationId())

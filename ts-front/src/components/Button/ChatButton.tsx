@@ -3,12 +3,10 @@ import { StringAvatar } from '../avatar';
 import { Conversation } from '@/models';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store';
-import { selectChatAction } from '@/store/conversations/conversation.action';
+import { getConversationMessagesAction, selectChatAction } from '@/store/conversations/conversation.action';
 
 type ChatButtonProps = {
   conversation: Conversation;
-  // selected: boolean;
-  // onConversationSelect: (conversation: Conversation) => void;
 };
 
 export const ChatButton: React.FC<ChatButtonProps> = ({ conversation }) => {
@@ -23,6 +21,7 @@ export const ChatButton: React.FC<ChatButtonProps> = ({ conversation }) => {
 
   const handleChatSelect = () => {
     dispatch(selectChatAction(conversation));
+    dispatch(getConversationMessagesAction(conversation.id.toString()));
   }
 
   return (

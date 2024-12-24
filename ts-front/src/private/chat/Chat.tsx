@@ -4,19 +4,18 @@ import SockJS from 'sockjs-client';
 import ChatContent from "./ChatContent";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
-import { addMessage } from "@/store/messages/message.actions";
 import { Box } from "@mui/material";
 import { ChatPayload, ChatUserData } from "@/models";
+import { addMessageAction } from "@/store/conversations/conversation.action";
 
 let stompClient: Client;
-
-
 
 const Chat: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { selectedConversation } = useSelector((state: RootState) => state.conversations);
   const { user } = useSelector((state: RootState) => state.user);
-  const messages = useSelector((state: RootState) => state.messages.messages);
+  const { messages } = useSelector((state: RootState) => state.conversations);
+
   const [ message, setMessage ] = useState<ChatUserData>({
     senderId: user?.uuid || "",
     conversationId: selectedConversation?.id || "",
@@ -36,8 +35,8 @@ const Chat: React.FC = () => {
 
   const onConnect = () => {
     setMessage({ ...message, connected: true });
-    stompClient.subscribe(`/user/${message.senderId}/private`, onPrivateMessageReceived);
-    userJoin();
+    stompClient.subscribe(`/conversation/${message.conversationId}/private`, onPrivateMessageReceived);
+    // userJoin();
   };
 
   const onError = (error: any) => {
@@ -45,19 +44,12 @@ const Chat: React.FC = () => {
   };
 
   const onPrivateMessageReceived = (payload: { body: string }) => {
+    console.log( "Received message: " + payload.body);
     const payloadData: ChatPayload = JSON.parse(payload.body);
-    dispatch(addMessage(payloadData));
+    dispatch(addMessageAction(payloadData));
   };
 
-  const userJoin = () => {
-    if (stompClient && stompClient.connected) {
-      const chatMessage = {
-        senderId: message.senderId,
-        status: "JOIN",
-      };
-      stompClient.send("/app/message", {}, JSON.stringify(chatMessage));
-    }
-  };
+
 
   const sendMessage = () => {
     if (stompClient && stompClient.connected) {
@@ -67,7 +59,7 @@ const Chat: React.FC = () => {
         content: message.content,
         status: "MESSAGE",
       };
-      dispatch(addMessage(chatMessage));
+      // dispatch(addMessageAction(chatMessage));
       stompClient.send("/app/private-message", {}, JSON.stringify(chatMessage));
       setMessage({ ...message, content: "" });
     }
@@ -81,7 +73,6 @@ const Chat: React.FC = () => {
   return (
     <Box minWidth="100%" minHeight="100%">
       <ChatContent
-        messages={messages}
         message={message}
         handleMessageInput={handleMessageInput}
         sendMessage={sendMessage}
