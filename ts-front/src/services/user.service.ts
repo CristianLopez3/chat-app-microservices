@@ -21,14 +21,3 @@ export const signUp = (user: User): UseApiCall<UserResponse> => {
     controller,
   };
 };
-
-export const getUserConversationsById = (userId: string): UseApiCall<UserResponse[]> => {
-  const controller = loadAbort();
-  return {
-    call: axiosInstance.get<UserResponse[]>(`users/${userId}/conversations`, {
-      signal: controller.signal,
-    }),
-    controller,
-  };
-};
-

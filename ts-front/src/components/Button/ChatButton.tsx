@@ -1,30 +1,44 @@
 import { ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material';
-import { StringAvatar } from '../avatar'; // Asegúrate de importar StringAvatar correctamente
-import { ChatMember, UserResponse } from '@/models';
+import { StringAvatar } from '../avatar';
+import { Conversation } from '@/models';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/store';
+import { selectChatAction } from '@/store/conversations/conversation.action';
 
 type ChatButtonProps = {
-  member: UserResponse;
-  selected: boolean;
-  onChatSelect: (member: UserResponse) => void;
+  conversation: Conversation;
+  // selected: boolean;
+  // onConversationSelect: (conversation: Conversation) => void;
 };
 
-export const ChatButton: React.FC<ChatButtonProps> = ({member, selected, onChatSelect }) => {
-  const { userId, name, username } = member;
+export const ChatButton: React.FC<ChatButtonProps> = ({ conversation }) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { selectedConversation } = useSelector((state: RootState) => state.conversations);
+  const { user } = useSelector((state: RootState) => state.user);
+  const { isGroup, groupMetadata, participants, id } = conversation;
+  const name = isGroup ? groupMetadata!.name :
+    participants.filter(participant => participant.uuid !== user?.uuid)[0]?.name || 'Unknown User';
+  const username = isGroup ? 'Group' : participants.filter(participant => participant.uuid !== user?.uuid)[0]?.username || 'Unknown User';
+  const isSelected = selectedConversation ? selectedConversation.id === id : false;
+
+  const handleChatSelect = () => {
+    dispatch(selectChatAction(conversation));
+  }
 
   return (
     <ListItem
-      key={userId + Math.random()}
+      key={id}
       alignItems="flex-start"
       sx={{
-        bgcolor: selected ? '#ddddee' : '#f9fafc',
+        bgcolor: isSelected ? '#ddddee' : '#f9fafc',
         borderRadius: 3,
         cursor: 'pointer',
         '&:hover': {
-          bgcolor: selected ? '#ddddee' : '#f0f0f5',
+          bgcolor: isSelected ? '#ddddee' : '#f0f0f5',
         },
         width: '100%',
       }}
-      onClick={() => onChatSelect(member)}
+    onClick={handleChatSelect}
     >
       <ListItemAvatar>
         <StringAvatar name={name} />

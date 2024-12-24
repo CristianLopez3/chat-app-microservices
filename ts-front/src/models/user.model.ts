@@ -5,17 +5,16 @@ export interface UserLogin {
 }
 
 export interface User {
-  userId: string;
+  userId: string | null;
   name: string;
-  lastname: string;
   username: string;
   password: string;
 }
 
 export type UserResponse = {
-  userId: string;
+  userId: string | null;
+  uuid: string;
   name: string;
-  lastname: string;
   username: string;
   selected?: boolean;
 }

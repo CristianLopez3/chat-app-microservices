@@ -15,6 +15,7 @@ const Login: React.FC = () => {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
+    console.log({ username, password });
     dispatch(loginUserAction({ username, password }));
   };
 

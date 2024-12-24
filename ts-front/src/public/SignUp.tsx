@@ -8,7 +8,6 @@ import { signUpUserAction } from '@/store/users';
 
 const SignUp = () => {
   const [name, setName] = useState("");
-  const [lastname, setLastname] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch<AppDispatch>();
@@ -16,9 +15,9 @@ const SignUp = () => {
   const { isLoading, user, error } = useSelector((state: RootState) => state.user);
 
   const handleSubmit = (event: React.FormEvent) => {
-    console.log("Mading a call: " + name, lastname, username, password);
+    console.log("Mading a call: " + name, username, password);
     event.preventDefault();
-    dispatch(signUpUserAction({ name, lastname, username, password }));
+    dispatch(signUpUserAction({ userId: null, name, username, password }));
   };
 
   useEffect(() => {
@@ -51,18 +50,6 @@ const SignUp = () => {
             autoFocus
             value={name}
             onChange={(e) => setName(e.target.value)}
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="lastname"
-            label="Lastname"
-            name="lastname"
-            autoComplete="lastname"
-            autoFocus
-            value={lastname}
-            onChange={(e) => setLastname(e.target.value)}
           />
           <TextField
             margin="normal"

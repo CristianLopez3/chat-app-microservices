@@ -31,7 +31,7 @@ public class ConversationServiceImpl implements ConversationService {
 
     @Override
     @Transactional
-    public ConversationDTO createConversation(CreateConversationDTO dto) {
+    public ConversationResponseDTO createConversation(CreateConversationDTO dto) {
         logger.debug("Creating conversation with data: " + dto);
         conversationValidator.validate(dto);
 
@@ -39,19 +39,34 @@ public class ConversationServiceImpl implements ConversationService {
 
         List<Participant> participants = dto.participants()
                 .stream()
-                .map(participantUUID -> {
-                    if (!userService.existsByUuid(participantUUID)) {
-                        throw new ResourceNotFoundException("User with UUID " + participantUUID + " not found");
+                .map(uuid -> {
+                    var user = userService.getUserByUUID(uuid.toString());
+                    if (user == null) {
+                        throw new ResourceNotFoundException("User with UUID " + uuid + " not found");
                     }
                     return Participant.builder()
-                            .participantId(participantUUID)
                             .conversation(conversation)
+                            .participantId(uuid)
                             .build();
                 }).toList();
 
         conversation.setParticipants(participants);
         Conversation savedConversation = conversationRepository.save(conversation);
-        return ConversationDTO.fromConversation(savedConversation);
+        return ConversationResponseDTO.builder()
+                .id(savedConversation.getId())
+                .participants(conversation.getParticipants().stream()
+                        .map(participant -> userService.getUserByUUID(participant.getParticipantId().toString()))
+                        .toList()
+                )
+                .groupMetadata(savedConversation.getGroupMetadata() != null
+                        ? GroupMetadataResponseDTO.builder()
+                        .name(savedConversation.getGroupMetadata().getName())
+                        .description(savedConversation.getGroupMetadata().getDescription())
+                        .build()
+                        : null
+                )
+                .isGroup(savedConversation.isGroup())
+                .build();
     }
 
 
@@ -74,7 +89,7 @@ public class ConversationServiceImpl implements ConversationService {
                                     : null;
                             var participants = participantsRepository.findParticipantsByConversationId(projection.getId())
                                     .stream()
-                                    .map( participant -> userService.getUserByUUID(participant.toString()))
+                                    .map(participant -> userService.getUserByUUID(participant.toString()))
                                     .toList();
 
                             return ConversationResponseDTO.builder()

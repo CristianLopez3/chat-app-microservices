@@ -1,0 +1,19 @@
+meta {
+  name: create user gt
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:8083/users
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Ronaldo",
+    "username": "ronaldo@2002",
+    "password": "secret"
+  }
+}

@@ -10,7 +10,7 @@ import java.util.List;
 public interface ConversationService {
 
 
-    ConversationDTO createConversation(CreateConversationDTO request);
+    ConversationResponseDTO createConversation(CreateConversationDTO request);
 
     void deleteConversation(Long conversationId);
 

@@ -8,14 +8,14 @@ export interface ChatMember {
 
 export interface ChatUserData {
   senderId: string;
-  receiverId: string;
+  conversationId: string | number;
   message: string;
   connected: boolean;
 }
 
 export interface ChatPayload{
   senderId: string;
-  receiverId: string;
+  conversationId: string;
   message: string;
   status: string;
 }

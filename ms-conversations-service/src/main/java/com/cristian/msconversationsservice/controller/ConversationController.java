@@ -29,7 +29,7 @@ public class ConversationController {
     private final ConversationService conversationService;
 
     @PostMapping
-    public ResponseEntity<ConversationDTO> createConversation(@RequestBody @Valid CreateConversationDTO request) {
+    public ResponseEntity<ConversationResponseDTO> createConversation(@RequestBody @Valid CreateConversationDTO request) {
         logger.debug("Creating conversation with data: {}", request);
         var conversation = conversationService.createConversation(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(conversation);
