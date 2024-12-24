@@ -14,6 +14,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +43,7 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public Flux<Message> getMessagesByConversationId(String conversationId) {
         return messageRepository.findByConversationId(conversationId)
+                .sort(Comparator.comparing(Message::getCreatedAt))
                 .switchIfEmpty(Mono.error(new ResourceNotFoundException("No messages found for conversation with id: " + conversationId)))
                 .onErrorResume(e -> {
                     logger.error("Error fetching messages for conversationId: {}", conversationId, e);

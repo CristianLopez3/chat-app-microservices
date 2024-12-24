@@ -3,88 +3,58 @@ import SendMessage from "./SendMessage";
 import { Box, List, ListItem, ListItemText } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import { ChatUserData, ChatPayload } from "@/models";
-import { StringAvatar } from "@/components/avatar";
 
 type ChatContentProps = {
-  privateMessage: Map<string, ChatPayload[]>;
-  publicMessage: ChatPayload[];
-  userData: ChatUserData;
+  messages: Record<string, ChatPayload[]>;
+  message: ChatUserData;
   handleMessageInput: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  sendPublicMessage: () => void;
-  sendPrivateMessage: () => void;
+  sendMessage: () => void;
 };
 
 const ChatContent: React.FC<ChatContentProps> = ({
-  privateMessage,
-  publicMessage,
-  userData,
+  messages,
+  message,
   handleMessageInput,
-  sendPublicMessage,
-  sendPrivateMessage,
+  sendMessage,
 }) => {
+  const conversationMessages = messages[message.conversationId] || [];
+
   return (
     <Box sx={{ minWidth: "100%", height: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Grid container direction="column" sx={{ flex: 1, overflow: 'hidden' }}>
         <Grid sx={{ flex: 1, overflowY: 'scroll', background: "gray", border: "1px solid #000" }} className="chat-scrollbar">
           <List sx={{ height: "95%" }}>
-            {userData.receiverId === "PUBLIC"
-              ? publicMessage.map((chat, index) => (
-                <ListItem
+            {conversationMessages.map((chat, index) => (
+              <ListItem
+                sx={{
+                  display: 'flex',
+                  justifyContent: chat.senderId === message.senderId ? 'flex-end' : 'flex-start',
+                  alignItems: 'flex-start',
+                }}
+                key={index}
+              >
+                <ListItemText
+                  primary={chat.content}
                   sx={{
-                    display: 'flex',
-                    justifyContent: chat.senderId === userData.senderId ? 'flex-end' : 'flex-start',
-                    alignItems: 'flex-start',
+                    paddingLeft: chat.senderId !== message.senderId ? "5px" : undefined,
+                    paddingRight: chat.senderId === message.senderId ? "5px" : undefined,
+                    textAlign: chat.senderId === message.senderId ? 'right' : 'left',
+                    background: chat.senderId === message.senderId ? "#e0f7fa" : "#f1f8e9",
+                    maxWidth: '70%',
+                    wordBreak: 'break-word',
+                    overflowWrap: 'anywhere',
                   }}
-                  key={index}
-                >
-                  <ListItemText
-                    color='#7678ed'
-                    primary={chat.message}
-                    sx={{
-                      paddingLeft: chat.senderId !== userData.senderId ? "5px" : undefined,
-                      paddingRight: chat.senderId === userData.senderId ? "5px" : undefined,
-                      textAlign: chat.senderId === userData.senderId ? 'right' : 'left',
-                      background: "red",
-                      maxWidth: '70%',
-                      wordBreak: 'break-word',
-                      overflowWrap: 'anywhere',
-                    }}
-                  />
-                </ListItem>
-              ))
-              : privateMessage.get(userData.receiverId)?.map((chat, index) => (
-                <ListItem
-                  sx={{
-                    display: 'flex',
-                    justifyContent: chat.senderId === userData.senderId ? 'flex-end' : 'flex-start',
-                    alignItems: 'flex-start',
-                  }}
-                  key={index}
-                >
-                  <ListItemText
-                    color='#7678ed'
-                    primary={chat.message}
-                    sx={{
-                      paddingLeft: chat.senderId !== userData.senderId ? "5px" : undefined,
-                      paddingRight: chat.senderId === userData.senderId ? "5px" : undefined,
-                      textAlign: chat.senderId === userData.senderId ? 'right' : 'left',
-                      background: "red",
-                      maxWidth: '70%',
-                      wordBreak: 'break-word',
-                      overflowWrap: 'anywhere',
-                    }}
-                  />
-                </ListItem>
-              ))}
+                />
+              </ListItem>
+            ))}
           </List>
         </Grid>
         <Grid>
           <Box sx={{ borderTop: '1px solid #ccc', padding: 2 }}>
             <SendMessage
-              userData={userData}
+              message={message}
               handleMessageInput={handleMessageInput}
-              sendPublicMessage={sendPublicMessage}
-              sendPrivateMessage={sendPrivateMessage}
+              sendMessage={sendMessage}
             />
           </Box>
         </Grid>

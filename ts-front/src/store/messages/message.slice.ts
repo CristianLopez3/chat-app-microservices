@@ -1,29 +1,23 @@
-// src/store/userSlice.ts
 import { createSlice } from '@reduxjs/toolkit';
 import { addMessage } from './message.actions';
+import { ChatPayload } from '@/models';
 
-interface UserState {
+interface MessageState {
   isLoading: boolean;
-  messages: any[];
+  messages: Record<string | number, ChatPayload[]>;
   error: string | null;
 }
 
-const initialState: UserState = {
-  messages: [],
+const initialState: MessageState = {
+  messages: {},
   isLoading: false,
   error: null,
 };
 
-const userSlice = createSlice({
-  name: 'user',
+const messageSlice = createSlice({
+  name: 'messages',
   initialState,
-  reducers: {
-    logoutUser(state) {
-      state.messages = [];
-      state.isLoading = false;
-      state.error = null;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(addMessage.pending, (state) => {
@@ -31,14 +25,17 @@ const userSlice = createSlice({
       })
       .addCase(addMessage.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.messages = action.payload;
+        const { conversationId } = action.payload;
+        if (!state.messages[conversationId]) {
+          state.messages[conversationId] = [];
+        }
+        state.messages[conversationId].push(action.payload);
       })
       .addCase(addMessage.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload as string;
+        state.error = action.error.message || 'Failed to add message';
       });
   },
 });
 
-export const { logoutUser } = userSlice.actions;
-export default userSlice.reducer;
+export default messageSlice.reducer;

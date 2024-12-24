@@ -1,6 +1,6 @@
 // src/store/userSlice.ts
 import { createSlice } from '@reduxjs/toolkit';
-import { Conversation, UserResponse } from '@/models';
+import { ChatPayload, Conversation, UserResponse } from '@/models';
 import { createConversationAction, getUserConversationsAction, selectChatAction } from './conversation.action';
 
 interface ConversationState {
@@ -8,6 +8,7 @@ interface ConversationState {
   user: UserResponse | null;
   conversations: Conversation[];
   selectedConversation: Conversation | null;
+  messages: ChatPayload[];
   error: {
     message: string;
     status: number;
@@ -19,6 +20,7 @@ const initialState: ConversationState = {
   isLoading: false,
   conversations: [],
   selectedConversation: null,
+  messages: [],
   error: null,
 };
 
@@ -74,5 +76,4 @@ const conversationSlice = createSlice({
   },
 });
 
-export const {  } = conversationSlice.actions;
 export default conversationSlice.reducer;

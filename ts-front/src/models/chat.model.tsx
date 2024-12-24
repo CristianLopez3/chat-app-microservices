@@ -9,13 +9,13 @@ export interface ChatMember {
 export interface ChatUserData {
   senderId: string;
   conversationId: string | number;
-  message: string;
+  content: string;
   connected: boolean;
 }
 
 export interface ChatPayload{
   senderId: string;
-  conversationId: string;
-  message: string;
+  conversationId: string | number;
+  content: string;
   status: string;
 }

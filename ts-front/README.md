@@ -1,5 +1,8 @@
 # Chat Application
 
+## TO DO's
+
+❌ -> Add messages to conversation state.
 
 ### Resources
 

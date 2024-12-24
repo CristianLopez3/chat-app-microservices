@@ -4,19 +4,17 @@ import SendIcon from '@mui/icons-material/Send';
 import { ChatUserData } from "@/models";
 
 type SendMessageProps = {
-  userData: ChatUserData;
+  message: ChatUserData;
   handleMessageInput: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  sendPublicMessage: () => void;
-  sendPrivateMessage: () => void;
+  sendMessage: () => void;
 };
 
 const SendMessage: React.FC<SendMessageProps> = ({
-  userData,
+  message,
   handleMessageInput,
-  sendPublicMessage,
-  sendPrivateMessage,
+  sendMessage,
 }) => {
-  const { recievername } = userData;
+  const { content } = message;
   return (
     <Box
       sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "15px" }}
@@ -28,7 +26,7 @@ const SendMessage: React.FC<SendMessageProps> = ({
         type="text"
         className="input-message"
         placeholder="Enter the message"
-        value={userData.message}
+        value={content}
         onChange={handleMessageInput}
         variant="outlined"
         sx={{ fontSize: "12px" }}
@@ -36,7 +34,7 @@ const SendMessage: React.FC<SendMessageProps> = ({
       <IconButton
         aria-label="send"
         type="button"
-        onClick={ recievername === "PUBLIC" ? sendPublicMessage : sendPrivateMessage}
+        onClick={sendMessage}
       >
         <SendIcon color="primary" fontSize="large" />
       </IconButton>

@@ -13,12 +13,6 @@ const Dashboard: React.FC = () => {
   const { conversations } = useSelector((state: RootState) => state.conversations);
   const { selectedConversation } = useSelector((state: RootState) => state.conversations);
   const dispatch = useDispatch<AppDispatch>();
-  const [userData, setUserData] = useState<ChatUserData>({
-    senderId: user?.uuid || "",
-    conversationId: selectedConversation?.id || "",
-    message: "",
-    connected: false,
-  });
 
   const fetchConversations = () => {
     if (user) {
@@ -47,7 +41,7 @@ const Dashboard: React.FC = () => {
         >
           {selectedConversation ? (
              <Box minWidth="100%" minHeight={{ sm: '99vh' }}>
-              <Chat userData={userData} setUserData={setUserData} />
+              <Chat />
             </Box> 
            ) : (
             <Typography variant="h4" component="h1" align="center">
